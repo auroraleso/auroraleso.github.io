@@ -1,0 +1,2262 @@
+<!DOCTYPE html>
+<html lang="it"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Piano di Accumulo PAC (Trade Republic)</title>
+  <style>
+    /* Reset e variabili di design in stile Google Material / Fintech pulito */
+    :root {
+      --bg-page: #f4f6f9;
+      --bg-card: #ffffff;
+      --bg-subtle: #f8fafc;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --border-focus: #1a73e8;
+      --primary: #1a73e8;
+      --primary-hover: #1557b0;
+      --success: #16a34a;
+      --success-bg: #dcfce7;
+      --warning: #d97706;
+      --warning-bg: #fef3c7;
+      --danger: #dc2626;
+      --danger-bg: #fee2e2;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      line-height: 1.5;
+      padding-bottom: 56px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Header sticky */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+
+    .header-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.25;
+    }
+
+    .brand-subtitle {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: var(--success);
+      display: inline-block;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Pulsanti */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.16s ease;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 1px 2px rgba(26, 115, 232, 0.25);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background-color: #f1f5f9;
+      color: var(--text-secondary);
+      border-color: #e2e8f0;
+    }
+
+    .btn-secondary:hover {
+      background-color: #e2e8f0;
+      color: var(--text-primary);
+    }
+
+    .btn-ghost-danger {
+      background-color: transparent;
+      color: var(--text-muted);
+    }
+
+    .btn-ghost-danger:hover {
+      background-color: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .btn-rebalance {
+      background-color: #eff6ff;
+      color: var(--primary);
+      border-color: #bfdbfe;
+    }
+
+    .btn-rebalance:hover {
+      background-color: #dbeafe;
+    }
+
+    /* Layout Principale */
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px 20px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      padding: 22px 24px;
+    }
+
+    .card-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .card-title {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .card-desc {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Sezione Top: Versamento + KPI */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 2fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 860px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .contribution-box {
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .field-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+
+    .currency-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .currency-symbol {
+      position: absolute;
+      left: 14px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .hero-input {
+      width: 100%;
+      padding: 10px 14px 10px 34px;
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: var(--radius-md);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .hero-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.14);
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .kpi-card {
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    .kpi-card.status-ok {
+      background-color: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+
+    .kpi-card.status-warn {
+      background-color: #fffbeb;
+      border-color: #fde68a;
+    }
+
+    .kpi-card.status-over {
+      background-color: #fef2f2;
+      border-color: #fecaca;
+    }
+
+    .kpi-title {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .kpi-value {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+      margin: 6px 0;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .kpi-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 999px;
+      width: fit-content;
+    }
+
+    .badge-ok {
+      background-color: var(--success-bg);
+      color: #15803d;
+    }
+
+    .badge-warn {
+      background-color: var(--warning-bg);
+      color: #b45309;
+    }
+
+    .badge-over {
+      background-color: var(--danger-bg);
+      color: #b91c1c;
+    }
+
+    .kpi-sub {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    /* Slider Personalizzati */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--thumb-color, #1a73e8);
+      border: 2px solid #ffffff;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--thumb-color, #1a73e8);
+      border: 2px solid #ffffff;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+      cursor: pointer;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    /* Griglia Portafoglio ETF + Grafico Ciambella */
+    .portfolio-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.45fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 920px) {
+      .portfolio-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .donut-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px 16px;
+    }
+
+    .donut-container {
+      position: relative;
+      width: 230px;
+      height: 230px;
+    }
+
+    .donut-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      pointer-events: none;
+      padding: 24px;
+    }
+
+    .donut-center-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      max-width: 130px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .donut-center-val {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin: 2px 0;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .donut-center-sub {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .donut-segment {
+      transition: stroke-dasharray 0.3s ease, stroke-dashoffset 0.3s ease, stroke-width 0.18s ease;
+      cursor: pointer;
+    }
+
+    .donut-segment:hover {
+      stroke-width: 25;
+    }
+
+    .legend-compact {
+      width: 100%;
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 0.8rem;
+      padding: 4px 6px;
+      border-radius: 6px;
+    }
+
+    .legend-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .legend-name {
+      color: var(--text-secondary);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .legend-right {
+      font-weight: 700;
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+    }
+
+    /* Lista ETF Editabili */
+    .etf-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .etf-item {
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .etf-item:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+    }
+
+    .etf-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .etf-name-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .color-picker-input {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border: none;
+      border-radius: 50%;
+      background: transparent;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+    }
+
+    .color-picker-input::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    .color-picker-input::-webkit-color-swatch {
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 0 1px #cbd5e1;
+    }
+
+    .etf-name-input {
+      width: 100%;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      padding: 4px 8px;
+      outline: none;
+      transition: all 0.15s;
+    }
+
+    .etf-name-input:hover {
+      border-color: #cbd5e1;
+      background: #ffffff;
+    }
+
+    .etf-name-input:focus {
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.12);
+    }
+
+    .etf-controls-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .etf-amount-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .etf-amount-input {
+      width: 84px;
+      padding: 5px 22px 5px 8px;
+      text-align: right;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      outline: none;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .etf-amount-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.14);
+    }
+
+    .etf-euro-suffix {
+      position: absolute;
+      right: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .btn-icon-del {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      padding: 6px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+
+    .btn-icon-del:hover {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .etf-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .etf-weight-pill {
+      font-weight: 700;
+      color: var(--text-secondary);
+      background: #e2e8f0;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .btn-add-etf {
+      width: 100%;
+      padding: 11px;
+      margin-top: 4px;
+      border: 1.5px dashed #cbd5e1;
+      border-radius: var(--radius-md);
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .btn-add-etf:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: #f8fafc;
+    }
+
+    /* Simulatore Crescita Composta */
+    .sim-controls-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .sim-controls-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sim-control-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sim-control-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .sim-control-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .sim-control-val {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .sim-input-inline {
+      width: 96px;
+      padding: 4px 8px;
+      text-align: right;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .sim-input-inline:focus {
+      border-color: var(--primary);
+    }
+
+    .sim-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 680px) {
+      .sim-summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sim-stat {
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      background: #ffffff;
+    }
+
+    .sim-stat.highlight {
+      background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
+      border-color: #bfdbfe;
+    }
+
+    .sim-stat-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .sim-stat-val {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-top: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .sim-stat-val.gain {
+      color: var(--success);
+    }
+
+    .sim-stat-val.total {
+      color: var(--primary);
+    }
+
+    /* Area Grafico Canvas */
+    .chart-box {
+      position: relative;
+      width: 100%;
+      height: 310px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px;
+    }
+
+    .chart-box canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .chart-legend-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .chart-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .chart-swatch {
+      width: 14px;
+      height: 4px;
+      border-radius: 2px;
+    }
+
+    /* Tooltip Grafico Proiezione */
+    .chart-tooltip {
+      position: absolute;
+      pointer-events: none;
+      background: rgba(15, 23, 42, 0.94);
+      color: #ffffff;
+      padding: 10px 13px;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      line-height: 1.45;
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      transition: opacity 0.12s ease;
+      z-index: 20;
+      white-space: nowrap;
+    }
+
+    /* Footer */
+    .app-footer {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+      padding: 0 16px;
+    }
+
+    /* Toast & Modal */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 11px 16px;
+      border-radius: 12px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      transform: translateY(90px);
+      opacity: 0;
+      transition: all 0.25s ease;
+      z-index: 50;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(3px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 60;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      max-width: 420px;
+      width: 100%;
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-color);
+    }
+
+    .modal-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .modal-text {
+      font-size: 0.86rem;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .hidden-input {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Sticky -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+            <polyline points="16 7 22 7 22 13"></polyline>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">Piano di Accumulo PAC (Trade Republic)</h1>
+          <div class="brand-subtitle">
+            <span>Gestione mensile portafoglio ETF, pesi percentuali e proiezione nel tempo</span>
+            <span>•</span>
+            <span id="saveStatus"><span class="status-dot"></span> Salvato (15:01)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="btnDownloadHtml" type="button" class="btn btn-primary" title="Scarica il file HTML autonomo con tutti i tuoi dati attuali incorporati">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>Scarica App (.html)</span>
+        </button>
+
+        <button id="btnExportJson" type="button" class="btn btn-secondary" title="Esporta backup dati in JSON">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+          <span>Esporta JSON</span>
+        </button>
+
+        <label for="inputImportJson" class="btn btn-secondary" title="Importa backup dati da JSON">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <span>Importa JSON</span>
+        </label>
+        <input type="file" id="inputImportJson" accept=".json,application/json" class="hidden-input">
+
+        <button id="btnReset" type="button" class="btn btn-ghost-danger" title="Ripristina valori iniziali">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+          <span>Ripristina predefiniti</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- 1. Versamento Mensile Totale & KPI Cards -->
+    <section class="card">
+      <div class="hero-grid">
+        <div class="contribution-box">
+          <label for="monthlyBudgetInput" class="field-label">Versamento Mensile Totale (€)</label>
+          <div class="currency-input-wrap">
+            <span class="currency-symbol">€</span>
+            <input id="monthlyBudgetInput" type="number" min="0" step="5" value="0" class="hero-input">
+          </div>
+          <input id="monthlyBudgetSlider" type="range" min="50" max="2000" step="10" value="0" style="--thumb-color: #1a73e8;">
+          <span class="kpi-sub">Budget mensile destinato al piano di accumulo su Trade Republic.</span>
+        </div>
+
+        <div class="kpi-grid">
+          <!-- KPI 1: Totale Allocato Mensile -->
+          <div id="kpiAllocatedCard" class="kpi-card status-ok">
+            <span class="kpi-title">Totale Allocato Mensile</span>
+            <div id="kpiAllocatedValue" class="kpi-value">0 €</div>
+            <div id="kpiAllocationBadge" class="kpi-badge badge-ok">100% allocato</div>
+          </div>
+
+          <!-- KPI 2: Versamento Annuale Stimato -->
+          <div class="kpi-card">
+            <span class="kpi-title">Versamento Annuale Stimato</span>
+            <div id="kpiAnnualValue" class="kpi-value">3600 €</div>
+            <span id="kpiAnnualSub" class="kpi-sub">12 mensilità da 0 €</span>
+          </div>
+
+          <!-- KPI 3: Capitale Stimato a 10 Anni -->
+          <div class="kpi-card">
+            <span class="kpi-title">Capitale Stimato a 10 Anni</span>
+            <div id="kpiTenYearValue" class="kpi-value" style="color: var(--primary);">52.228 €</div>
+            <span id="kpiTenYearSub" class="kpi-sub">Al 7,0% annuo (0 €/mese)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Portafoglio ETF & Grafico di Allocazione -->
+    <section class="card">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">Ripartizione Portafoglio ETF</h2>
+          <p class="card-desc">Modifica gli importi mensili dei singoli ETF, rinominali o bilancia automaticamente le quote.</p>
+        </div>
+        <button id="btnRebalance" type="button" class="btn btn-rebalance" title="Scala proporzionalmente gli ETF per farli sommare esattamente al Versamento Mensile Totale">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"></path><path d="M3 12h18"></path><circle cx="12" cy="12" r="9"></circle></svg>
+          <span>Ribilancia al 100%</span>
+        </button>
+      </div>
+
+      <div class="portfolio-layout">
+        <!-- Colonna Sinistra: Grafico Ciambella SVG -->
+        <div class="donut-wrapper">
+          <div class="donut-container">
+            <svg viewBox="0 0 200 200" width="100%" height="100%" style="transform: rotate(-90deg); overflow: visible;">
+              <circle cx="100" cy="100" r="74" fill="transparent" stroke="#e2e8f0" stroke-width="21"></circle>
+              <g id="donutSegments">
+            <circle cx="100" cy="100" r="74" fill="transparent" stroke="#1a73e8" stroke-width="21" stroke-dasharray="201.4808088502254 464.9557127312894" stroke-dashoffset="0" class="donut-segment" data-name="ETF 1" data-amount="130 €" data-pct="43,3%"></circle>
+          
+            <circle cx="100" cy="100" r="74" fill="transparent" stroke="#34a853" stroke-width="21" stroke-dasharray="232.4778563656447 464.9557127312894" stroke-dashoffset="-201.4808088502254" class="donut-segment" data-name="ETF 2" data-amount="0 €" data-pct="50,0%"></circle>
+          
+            <circle cx="100" cy="100" r="74" fill="transparent" stroke="#ea4335" stroke-width="21" stroke-dasharray="30.997047515419293 464.9557127312894" stroke-dashoffset="-433.9586652158701" class="donut-segment" data-name="ETF 4" data-amount="20 €" data-pct="6,7%"></circle>
+          </g>
+            </svg>
+            <div class="donut-center">
+              <span id="donutCenterLabel" class="donut-center-label">Totale ETF</span>
+              <span id="donutCenterVal" class="donut-center-val">0 €</span>
+              <span id="donutCenterSub" class="donut-center-sub">4 ETF in portafoglio</span>
+            </div>
+          </div>
+
+          <div id="donutLegend" class="legend-compact">
+          <div class="legend-item">
+            <div class="legend-left">
+              <span class="legend-dot" style="background-color: #1a73e8;"></span>
+              <span class="legend-name" title="ETF 1">ETF 1</span>
+            </div>
+            <div class="legend-right">43,3% (130 €)</div>
+          </div>
+        
+          <div class="legend-item">
+            <div class="legend-left">
+              <span class="legend-dot" style="background-color: #34a853;"></span>
+              <span class="legend-name" title="ETF 2">ETF 2</span>
+            </div>
+            <div class="legend-right">50,0% (0 €)</div>
+          </div>
+        
+          <div class="legend-item">
+            <div class="legend-left">
+              <span class="legend-dot" style="background-color: #fbbc04;"></span>
+              <span class="legend-name" title="ETF 3">ETF 3</span>
+            </div>
+            <div class="legend-right">0,0% (0 €)</div>
+          </div>
+        
+          <div class="legend-item">
+            <div class="legend-left">
+              <span class="legend-dot" style="background-color: #ea4335;"></span>
+              <span class="legend-name" title="ETF 4">ETF 4</span>
+            </div>
+            <div class="legend-right">6,7% (20 €)</div>
+          </div>
+        </div>
+        </div>
+
+        <!-- Colonna Destra: Lista ETF Editabili -->
+        <div>
+          <div id="etfListContainer" class="etf-list">
+          <div class="etf-item">
+            <div class="etf-top-row">
+              <div class="etf-name-group">
+                <input type="color" value="#1a73e8" title="Cambia colore ETF" data-idx="0" class="etf-color-input color-picker-input">
+                <input type="text" value="ETF 1" aria-label="Nome ETF" title="Clicca per modificare il nome dell'ETF" data-idx="0" class="etf-name-input">
+              </div>
+
+              <div class="etf-controls-right">
+                <div class="etf-amount-box">
+                  <input type="number" min="0" step="1" value="130" aria-label="Importo mensile in euro" data-idx="0" class="etf-amount-input">
+                  <span class="etf-euro-suffix">€</span>
+                </div>
+
+                <button type="button" class="btn-icon-del" data-idx="0" title="Rimuovi ETF">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </button>
+              </div>
+            </div>
+
+            <input type="range" min="0" max="300" step="5" value="130" style="--thumb-color: #1a73e8;" data-idx="0" class="etf-slider-input">
+
+            <div class="etf-meta-row">
+              <span>Peso nel portafoglio: <span id="etf-weight-0" class="etf-weight-pill">43,3%</span></span>
+              <span id="etf-annual-0">150 € / anno</span>
+            </div>
+          </div>
+        
+          <div class="etf-item">
+            <div class="etf-top-row">
+              <div class="etf-name-group">
+                <input type="color" value="#34a853" title="Cambia colore ETF" data-idx="1" class="etf-color-input color-picker-input">
+                <input type="text" value="ETF 2" aria-label="Nome ETF" title="Clicca per modificare il nome dell'ETF" data-idx="1" class="etf-name-input">
+              </div>
+
+              <div class="etf-controls-right">
+                <div class="etf-amount-box">
+                  <input type="number" min="0" step="1" value="0" aria-label="Importo mensile in euro" data-idx="1" class="etf-amount-input">
+                  <span class="etf-euro-suffix">€</span>
+                </div>
+
+                <button type="button" class="btn-icon-del" data-idx="1" title="Rimuovi ETF">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </button>
+              </div>
+            </div>
+
+            <input type="range" min="0" max="300" step="5" value="0" style="--thumb-color: #34a853;" data-idx="1" class="etf-slider-input">
+
+            <div class="etf-meta-row">
+              <span>Peso nel portafoglio: <span id="etf-weight-1" class="etf-weight-pill">50,0%</span></span>
+              <span id="etf-annual-1">1800 € / anno</span>
+            </div>
+          </div>
+        
+          <div class="etf-item">
+            <div class="etf-top-row">
+              <div class="etf-name-group">
+                <input type="color" value="#fbbc04" title="Cambia colore ETF" data-idx="2" class="etf-color-input color-picker-input">
+                <input type="text" value="ETF 3" aria-label="Nome ETF" title="Clicca per modificare il nome dell'ETF" data-idx="2" class="etf-name-input">
+              </div>
+
+              <div class="etf-controls-right">
+                <div class="etf-amount-box">
+                  <input type="number" min="0" step="1" value="0" aria-label="Importo mensile in euro" data-idx="2" class="etf-amount-input">
+                  <span class="etf-euro-suffix">€</span>
+                </div>
+
+                <button type="button" class="btn-icon-del" data-idx="2" title="Rimuovi ETF">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </button>
+              </div>
+            </div>
+
+            <input type="range" min="0" max="300" step="5" value="0" style="--thumb-color: #fbbc04;" data-idx="2" class="etf-slider-input">
+
+            <div class="etf-meta-row">
+              <span>Peso nel portafoglio: <span id="etf-weight-2" class="etf-weight-pill">0,0%</span></span>
+              <span id="etf-annual-2">0 € / anno</span>
+            </div>
+          </div>
+        
+          <div class="etf-item">
+            <div class="etf-top-row">
+              <div class="etf-name-group">
+                <input type="color" value="#ea4335" title="Cambia colore ETF" data-idx="3" class="etf-color-input color-picker-input">
+                <input type="text" value="ETF 4" aria-label="Nome ETF" title="Clicca per modificare il nome dell'ETF" data-idx="3" class="etf-name-input">
+              </div>
+
+              <div class="etf-controls-right">
+                <div class="etf-amount-box">
+                  <input type="number" min="0" step="1" value="20" aria-label="Importo mensile in euro" data-idx="3" class="etf-amount-input">
+                  <span class="etf-euro-suffix">€</span>
+                </div>
+
+                <button type="button" class="btn-icon-del" data-idx="3" title="Rimuovi ETF">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </button>
+              </div>
+            </div>
+
+            <input type="range" min="0" max="300" step="5" value="20" style="--thumb-color: #ea4335;" data-idx="3" class="etf-slider-input">
+
+            <div class="etf-meta-row">
+              <span>Peso nel portafoglio: <span id="etf-weight-3" class="etf-weight-pill">6,7%</span></span>
+              <span id="etf-annual-3">20 € / anno</span>
+            </div>
+          </div>
+        </div>
+          <button id="btnAddEtf" type="button" class="btn-add-etf" style="margin-top: 12px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>+ Aggiungi ETF</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Simulatore di Crescita Composta -->
+    <section class="card">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">Simulatore di Crescita Composta nel Tempo</h2>
+          <p class="card-desc">Proiezione dell'interesse composto basata sull'importo mensile allocato sugli ETF e sul capitale iniziale.</p>
+        </div>
+      </div>
+
+      <!-- Controlli Simulazione -->
+      <div class="sim-controls-grid">
+        <div class="sim-control-card">
+          <div class="sim-control-top">
+            <label for="simYearsSlider" class="sim-control-label">Orizzonte Temporale (Anni)</label>
+            <span id="simYearsDisplay" class="sim-control-val">15 anni</span>
+          </div>
+          <input id="simYearsSlider" type="range" min="1" max="40" step="1" value="15" style="--thumb-color: #1a73e8;">
+        </div>
+
+        <div class="sim-control-card">
+          <div class="sim-control-top">
+            <label for="simReturnSlider" class="sim-control-label">Rendimento Annuo Atteso (%)</label>
+            <span id="simReturnDisplay" class="sim-control-val">7,0%</span>
+          </div>
+          <input id="simReturnSlider" type="range" min="1" max="15" step="0.5" value="7" style="--thumb-color: #16a34a;">
+        </div>
+
+        <div class="sim-control-card">
+          <div class="sim-control-top">
+            <label for="simInitialInput" class="sim-control-label">Capitale Già Investito (€)</label>
+            <input id="simInitialInput" type="number" min="0" step="100" value="0" class="sim-input-inline">
+          </div>
+          <input id="simInitialSlider" type="range" min="0" max="50000" step="250" value="0" style="--thumb-color: #0f172a;">
+        </div>
+      </div>
+
+      <!-- Metriche Finali Simulazione -->
+      <div class="sim-summary-grid">
+        <div class="sim-stat">
+          <div class="sim-stat-label">Capitale Versato Totale</div>
+          <div id="simTotalInvested" class="sim-stat-val">54.000 €</div>
+        </div>
+        <div class="sim-stat">
+          <div class="sim-stat-label">Rendimento / Plusvalenza Stimata</div>
+          <div id="simTotalGain" class="sim-stat-val gain">+41.643 €</div>
+        </div>
+        <div class="sim-stat highlight">
+          <div id="simFinalTitle" class="sim-stat-label">Valore Finale Stimato (a 15 anni)</div>
+          <div id="simFinalValue" class="sim-stat-val total">95.643 €</div>
+        </div>
+      </div>
+
+      <!-- Grafico Line/Area HTML5 Canvas -->
+      <div class="chart-box" id="chartContainer">
+        <canvas id="growthChartCanvas" width="1253" height="352"></canvas>
+        <div id="chartTooltip" class="chart-tooltip" style="opacity: 0; left: 540.133px; top: 18px;">
+          <div style="font-weight: 700; margin-bottom: 3px; color: #93c5fd;">
+            Anno 14
+          </div>
+          <div>Valore Stimato: <strong>85.708 €</strong></div>
+          <div>Capitale Versato: <strong>50.400 €</strong></div>
+          <div style="color: #86efac;">Guadagno Stimato: <strong>+35.308 €</strong></div>
+        </div>
+      </div>
+
+      <div class="chart-legend-bar">
+        <div class="chart-legend-item">
+          <span class="chart-swatch" style="background: #1a73e8;"></span>
+          <span>Valore Stimato Portafoglio</span>
+        </div>
+        <div class="chart-legend-item">
+          <span class="chart-swatch" style="background: #64748b;"></span>
+          <span>Capitale Versato Cumulato</span>
+        </div>
+      </div>
+    </section>
+
+    <footer class="app-footer">
+      Salvataggio automatico attivo nella memoria del browser • Usa <strong>Scarica App (.html)</strong> per salvare una copia offline aggiornata su PC o smartphone.
+    </footer>
+  </main>
+
+  <!-- Toast di notifica -->
+  <div id="toast" class="toast" role="status" aria-live="polite">
+    <span id="toastDot" class="status-dot"></span>
+    <span id="toastMsg">Salvato</span>
+  </div>
+
+  <!-- Modal conferma ripristino -->
+  <div id="resetModal" class="modal-backdrop">
+    <div class="modal-card">
+      <h3 class="modal-title">Ripristinare i valori predefiniti?</h3>
+      <p class="modal-text">Tutti gli importi mensili, gli ETF personalizzati e i parametri di simulazione torneranno alla configurazione iniziale (0 €/mese sui 4 ETF).</p>
+      <div class="modal-actions">
+        <button id="btnCancelReset" type="button" class="btn btn-secondary">Annulla</button>
+        <button id="btnConfirmReset" type="button" class="btn btn-primary" style="background-color: var(--danger);">Ripristina</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dati incorporati per portabilità offline -->
+  <script id="embedded-pac-data" type="application/json">null</script>
+
+  <script>
+    /**
+     * Stato iniziale predefinito con i 4 ETF richiesti dall'utente su Trade Republic
+     */
+    const INITIAL_STATE = {
+      monthlyBudget: 0,
+      etfs: [
+        {
+          id: 'etf_world',
+          name: 'ETF 1',
+          amount: 0,
+          color: '#1a73e8'
+        },
+        {
+          id: 'etf_europe',
+          name: 'ETF 2',
+          amount: 0,
+          color: '#34a853'
+        },
+        {
+          id: 'etf_em',
+          name: 'ETF 3',
+          amount: 0,
+          color: '#fbbc04'
+        },
+        {
+          id: 'etf_uranium',
+          name: 'ETF 4',
+          amount: 0,
+          color: '#ea4335'
+        }
+      ],
+      simulation: {
+        years: 15,
+        annualReturn: 7.0,
+        initialCapital: 0
+      }
+    };
+
+    const STORAGE_KEY = 'piano_pac_trade_republic_v1';
+    const PALETTE = ['#1a73e8', '#34a853', '#fbbc04', '#ea4335', '#8b5cf6', '#06b6d4', '#ec4899', '#f97316'];
+
+    let state = loadState();
+    let chartPointsCache = [];
+
+    /**
+     * Carica lo stato dando precedenza a:
+     * 1) Dati incorporati nel file HTML (se esportato tramite "Scarica App (.html)")
+     * 2) localStorage del browser
+     * 3) INITIAL_STATE
+     */
+    function loadState() {
+      try {
+        const embeddedNode = document.getElementById('embedded-pac-data');
+        if (embeddedNode && embeddedNode.textContent.trim() !== 'null' && embeddedNode.textContent.trim() !== '') {
+          const parsed = JSON.parse(embeddedNode.textContent);
+          if (parsed && Array.isArray(parsed.etfs)) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+            return parsed;
+          }
+        }
+      } catch (err) {
+        console.warn('Errore lettura stato incorporato:', err);
+      }
+
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && Array.isArray(parsed.etfs) && parsed.simulation) {
+            return parsed;
+          }
+        }
+      } catch (err) {
+        console.warn('Errore lettura localStorage:', err);
+      }
+
+      return JSON.parse(JSON.stringify(INITIAL_STATE));
+    }
+
+    /**
+     * Salva lo stato su localStorage
+     */
+    function persistState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        const statusEl = document.getElementById('saveStatus');
+        const now = new Date();
+        const hhmm = now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+        statusEl.innerHTML = `<span class="status-dot"></span> Salvato (${hhmm})`;
+      } catch (err) {
+        console.warn('Errore salvataggio localStorage:', err);
+      }
+    }
+
+    /**
+     * Formattazione numeri in Euro e Percentuale
+     */
+    function formatEuro(val, decimals = 0) {
+      const num = Number(val) || 0;
+      return num.toLocaleString('it-IT', {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+      }) + ' €';
+    }
+
+    function formatPercent(val) {
+      const num = Number(val) || 0;
+      return num.toLocaleString('it-IT', {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1
+      }) + '%';
+    }
+
+    /**
+     * Notifica Toast
+     */
+    let toastTimeout = null;
+    function showToast(msg, isError = false) {
+      const toast = document.getElementById('toast');
+      const dot = document.getElementById('toastDot');
+      const text = document.getElementById('toastMsg');
+      text.textContent = msg;
+      dot.style.backgroundColor = isError ? '#ef4444' : '#22c55e';
+      toast.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => toast.classList.remove('show'), 2800);
+    }
+
+    /**
+     * Calcolo crescita composta mensile per N anni
+     */
+    function computeCompoundSeries(initialCap, monthlyContrib, annualRatePct, years) {
+      const rMonthly = (annualRatePct / 100) / 12;
+      const series = [];
+
+      let balance = initialCap;
+      let invested = initialCap;
+
+      series.push({
+        year: 0,
+        invested: Math.round(invested),
+        value: Math.round(balance)
+      });
+
+      for (let y = 1; y <= years; y++) {
+        for (let m = 0; m < 12; m++) {
+          balance = (balance + monthlyContrib) * (1 + rMonthly);
+          invested += monthlyContrib;
+        }
+        series.push({
+          year: y,
+          invested: Math.round(invested),
+          value: Math.round(balance)
+        });
+      }
+
+      return series;
+    }
+
+    /**
+     * Aggiorna KPI, Grafico Donut, Pesi ETF e Simulatore
+     */
+    function updateAllViews() {
+      const budget = Math.max(0, Number(state.monthlyBudget) || 0);
+      const totalAllocated = state.etfs.reduce((sum, e) => sum + Math.max(0, Number(e.amount) || 0), 0);
+      const diff = budget - totalAllocated;
+
+      // 1. Aggiorna KPI Cards
+      const kpiAllocatedCard = document.getElementById('kpiAllocatedCard');
+      const kpiAllocatedVal = document.getElementById('kpiAllocatedValue');
+      const kpiBadge = document.getElementById('kpiAllocationBadge');
+
+      kpiAllocatedVal.textContent = formatEuro(totalAllocated);
+
+      if (Math.abs(diff) < 0.01) {
+        kpiAllocatedCard.className = 'kpi-card status-ok';
+        kpiBadge.className = 'kpi-badge badge-ok';
+        kpiBadge.textContent = '100% allocato';
+      } else if (diff > 0) {
+        kpiAllocatedCard.className = 'kpi-card status-warn';
+        kpiBadge.className = 'kpi-badge badge-warn';
+        kpiBadge.textContent = `Mancano ${formatEuro(diff)} da allocare`;
+      } else {
+        kpiAllocatedCard.className = 'kpi-card status-over';
+        kpiBadge.className = 'kpi-badge badge-over';
+        kpiBadge.textContent = `Superato di ${formatEuro(Math.abs(diff))}`;
+      }
+
+      // Versamento annuale stimato (basato sul budget mensile impostato)
+      document.getElementById('kpiAnnualValue').textContent = formatEuro(budget * 12);
+      document.getElementById('kpiAnnualSub').textContent = `12 mensilità da ${formatEuro(budget)}`;
+
+      // Capitale stimato a 10 anni (usando l'importo mensile effettivamente allocato sugli ETF)
+      const tenYearSeries = computeCompoundSeries(
+        Math.max(0, Number(state.simulation.initialCapital) || 0),
+        totalAllocated,
+        Number(state.simulation.annualReturn) || 0,
+        10
+      );
+      const tenYearFinal = tenYearSeries[tenYearSeries.length - 1].value;
+      document.getElementById('kpiTenYearValue').textContent = formatEuro(tenYearFinal);
+      document.getElementById('kpiTenYearSub').textContent = `Al ${formatPercent(state.simulation.annualReturn)} annuo (${formatEuro(totalAllocated)}/mese)`;
+
+      // 2. Aggiorna pesi % e annuali sulle righe ETF senza ricreare il DOM
+      state.etfs.forEach((etf, idx) => {
+        const amt = Math.max(0, Number(etf.amount) || 0);
+        const weight = totalAllocated > 0 ? (amt / totalAllocated) * 100 : 0;
+        const weightEl = document.getElementById(`etf-weight-${idx}`);
+        const annualEl = document.getElementById(`etf-annual-${idx}`);
+        if (weightEl) weightEl.textContent = formatPercent(weight);
+        if (annualEl) annualEl.textContent = `${formatEuro(amt * 12)} / anno`;
+      });
+
+      // 3. Aggiorna Grafico Ciambella SVG
+      renderDonutChart(totalAllocated);
+
+      // 4. Aggiorna Simulazione Crescita Composta
+      updateSimulationView(totalAllocated);
+    }
+
+    /**
+     * Renderizza il grafico a ciambella SVG e la legenda compatta
+     */
+    function renderDonutChart(totalAllocated) {
+      const segmentsGroup = document.getElementById('donutSegments');
+      const legendEl = document.getElementById('donutLegend');
+      const centerLabel = document.getElementById('donutCenterLabel');
+      const centerVal = document.getElementById('donutCenterVal');
+      const centerSub = document.getElementById('donutCenterSub');
+
+      centerLabel.textContent = 'Totale ETF';
+      centerVal.textContent = formatEuro(totalAllocated);
+      centerSub.textContent = `${state.etfs.length} ETF in portafoglio`;
+
+      const radius = 74;
+      const circumference = 2 * Math.PI * radius;
+      let cumulativeFraction = 0;
+      let segmentsHtml = '';
+
+      if (totalAllocated > 0) {
+        state.etfs.forEach((etf) => {
+          const amt = Math.max(0, Number(etf.amount) || 0);
+          if (amt <= 0) return;
+
+          const fraction = amt / totalAllocated;
+          const dashLen = fraction * circumference;
+          const dashOffset = -cumulativeFraction * circumference;
+          cumulativeFraction += fraction;
+
+          const pctStr = formatPercent(fraction * 100);
+          const amtStr = formatEuro(amt);
+
+          segmentsHtml += `
+            <circle
+              cx="100" cy="100" r="${radius}"
+              fill="transparent"
+              stroke="${etf.color}"
+              stroke-width="21"
+              stroke-dasharray="${dashLen} ${circumference}"
+              stroke-dashoffset="${dashOffset}"
+              class="donut-segment"
+              data-name="${escapeHtml(etf.name)}"
+              data-amount="${amtStr}"
+              data-pct="${pctStr}"
+            ></circle>
+          `;
+        });
+      }
+
+      segmentsGroup.innerHTML = segmentsHtml;
+
+      // Hover interattivo sui segmenti
+      segmentsGroup.querySelectorAll('.donut-segment').forEach(seg => {
+        seg.addEventListener('mouseenter', () => {
+          centerLabel.textContent = seg.dataset.name;
+          centerVal.textContent = seg.dataset.amount;
+          centerSub.textContent = `${seg.dataset.pct} del PAC`;
+        });
+        seg.addEventListener('mouseleave', () => {
+          centerLabel.textContent = 'Totale ETF';
+          centerVal.textContent = formatEuro(totalAllocated);
+          centerSub.textContent = `${state.etfs.length} ETF in portafoglio`;
+        });
+      });
+
+      // Legenda compatta sotto il grafico
+      legendEl.innerHTML = state.etfs.map(etf => {
+        const amt = Math.max(0, Number(etf.amount) || 0);
+        const pct = totalAllocated > 0 ? (amt / totalAllocated) * 100 : 0;
+        return `
+          <div class="legend-item">
+            <div class="legend-left">
+              <span class="legend-dot" style="background-color: ${etf.color};"></span>
+              <span class="legend-name" title="${escapeHtml(etf.name)}">${escapeHtml(etf.name)}</span>
+            </div>
+            <div class="legend-right">${formatPercent(pct)} (${formatEuro(amt)})</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /**
+     * Renderizza le card editabili dei singoli ETF
+     */
+    function renderEtfList() {
+      const container = document.getElementById('etfListContainer');
+      const budget = Math.max(300, Number(state.monthlyBudget) || 300);
+
+      container.innerHTML = state.etfs.map((etf, idx) => {
+        const sliderMax = Math.max(budget, Number(etf.amount) || 0, 300);
+        return `
+          <div class="etf-item">
+            <div class="etf-top-row">
+              <div class="etf-name-group">
+                <input
+                  type="color"
+                  value="${etf.color}"
+                  title="Cambia colore ETF"
+                  data-idx="${idx}"
+                  class="etf-color-input color-picker-input"
+                >
+                <input
+                  type="text"
+                  value="${escapeHtml(etf.name)}"
+                  aria-label="Nome ETF"
+                  title="Clicca per modificare il nome dell'ETF"
+                  data-idx="${idx}"
+                  class="etf-name-input"
+                >
+              </div>
+
+              <div class="etf-controls-right">
+                <div class="etf-amount-box">
+                  <input
+                    type="number"
+                    min="0"
+                    step="1"
+                    value="${etf.amount}"
+                    aria-label="Importo mensile in euro"
+                    data-idx="${idx}"
+                    class="etf-amount-input"
+                  >
+                  <span class="etf-euro-suffix">€</span>
+                </div>
+
+                <button type="button" class="btn-icon-del" data-idx="${idx}" title="Rimuovi ETF">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <input
+              type="range"
+              min="0"
+              max="${sliderMax}"
+              step="5"
+              value="${etf.amount}"
+              style="--thumb-color: ${etf.color};"
+              data-idx="${idx}"
+              class="etf-slider-input"
+            >
+
+            <div class="etf-meta-row">
+              <span>Peso nel portafoglio: <span id="etf-weight-${idx}" class="etf-weight-pill">0,0%</span></span>
+              <span id="etf-annual-${idx}">0 € / anno</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      attachEtfListeners();
+      updateAllViews();
+    }
+
+    /**
+     * Collega eventi sulle righe ETF
+     */
+    function attachEtfListeners() {
+      // Slider importo
+      document.querySelectorAll('.etf-slider-input').forEach(slider => {
+        slider.addEventListener('input', (e) => {
+          const idx = Number(e.target.dataset.idx);
+          const val = Math.max(0, Number(e.target.value) || 0);
+          state.etfs[idx].amount = val;
+
+          const numInput = document.querySelector(`.etf-amount-input[data-idx="${idx}"]`);
+          if (numInput) numInput.value = val;
+
+          persistState();
+          updateAllViews();
+        });
+      });
+
+      // Input numerico importo
+      document.querySelectorAll('.etf-amount-input').forEach(input => {
+        input.addEventListener('input', (e) => {
+          const idx = Number(e.target.dataset.idx);
+          const val = e.target.value === '' ? 0 : Math.max(0, Number(e.target.value) || 0);
+          state.etfs[idx].amount = val;
+
+          const slider = document.querySelector(`.etf-slider-input[data-idx="${idx}"]`);
+          if (slider) {
+            if (val > Number(slider.max)) slider.max = val;
+            slider.value = val;
+          }
+
+          persistState();
+          updateAllViews();
+        });
+      });
+
+      // Modifica nome ETF
+      document.querySelectorAll('.etf-name-input').forEach(input => {
+        input.addEventListener('change', (e) => {
+          const idx = Number(e.target.dataset.idx);
+          const cleanName = e.target.value.trim() || 'Nuovo ETF';
+          e.target.value = cleanName;
+          state.etfs[idx].name = cleanName;
+          persistState();
+          updateAllViews();
+        });
+      });
+
+      // Modifica colore ETF
+      document.querySelectorAll('.etf-color-input').forEach(picker => {
+        picker.addEventListener('input', (e) => {
+          const idx = Number(e.target.dataset.idx);
+          const newColor = e.target.value;
+          state.etfs[idx].color = newColor;
+
+          const slider = document.querySelector(`.etf-slider-input[data-idx="${idx}"]`);
+          if (slider) slider.style.setProperty('--thumb-color', newColor);
+
+          persistState();
+          updateAllViews();
+        });
+      });
+
+      // Elimina ETF
+      document.querySelectorAll('.btn-icon-del').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const idx = Number(e.currentTarget.dataset.idx);
+          const removed = state.etfs[idx].name;
+          state.etfs.splice(idx, 1);
+          persistState();
+          renderEtfList();
+          showToast(`Rimosso "${removed}"`);
+        });
+      });
+    }
+
+    /**
+     * Aggiorna metriche e grafico del Simulatore di Crescita Composta
+     */
+    function updateSimulationView(monthlyAllocated) {
+      const years = Math.max(1, Number(state.simulation.years) || 15);
+      const annualReturn = Math.max(0, Number(state.simulation.annualReturn) || 0);
+      const initialCap = Math.max(0, Number(state.simulation.initialCapital) || 0);
+
+      document.getElementById('simYearsDisplay').textContent = `${years} ${years === 1 ? 'anno' : 'anni'}`;
+      document.getElementById('simReturnDisplay').textContent = formatPercent(annualReturn);
+      document.getElementById('simFinalTitle').textContent = `Valore Finale Stimato (a ${years} ${years === 1 ? 'anno' : 'anni'})`;
+
+      const series = computeCompoundSeries(initialCap, monthlyAllocated, annualReturn, years);
+      const last = series[series.length - 1];
+      const gain = last.value - last.invested;
+
+      document.getElementById('simTotalInvested').textContent = formatEuro(last.invested);
+      document.getElementById('simTotalGain').textContent = (gain >= 0 ? '+' : '') + formatEuro(gain);
+      document.getElementById('simFinalValue').textContent = formatEuro(last.value);
+
+      drawGrowthChart(series);
+    }
+
+    /**
+     * Disegna il grafico lineare/area su HTML5 Canvas (100% autonomo e responsive)
+     */
+    function drawGrowthChart(series) {
+      const canvas = document.getElementById('growthChartCanvas');
+      const container = document.getElementById('chartContainer');
+      if (!canvas || !container) return;
+
+      const dpr = window.devicePixelRatio || 1;
+      const rect = container.getBoundingClientRect();
+      const width = Math.max(260, rect.width - 28);
+      const height = Math.max(200, rect.height - 28);
+
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, width, height);
+
+      const padLeft = 64;
+      const padRight = 18;
+      const padTop = 18;
+      const padBottom = 30;
+
+      const plotW = width - padLeft - padRight;
+      const plotH = height - padTop - padBottom;
+
+      const maxVal = Math.max(1000, ...series.map(d => d.value));
+      // Arrotonda il massimo verso l'alto per una scala pulita
+      const magnitude = Math.pow(10, Math.floor(Math.log10(maxVal)));
+      const yMax = Math.ceil(maxVal / magnitude) * magnitude;
+
+      const getX = (i) => padLeft + (series.length > 1 ? (i / (series.length - 1)) * plotW : 0);
+      const getY = (val) => padTop + plotH - (val / yMax) * plotH;
+
+      // Griglia orizzontale e etichette asse Y
+      ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+
+      const gridLines = 4;
+      for (let g = 0; g <= gridLines; g++) {
+        const val = (yMax / gridLines) * g;
+        const y = getY(val);
+
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(padLeft, y);
+        ctx.lineTo(width - padRight, y);
+        ctx.stroke();
+
+        ctx.fillStyle = '#64748b';
+        const label = val >= 1000 ? `${Math.round(val / 1000)}k €` : `${Math.round(val)} €`;
+        ctx.fillText(label, padLeft - 8, y);
+      }
+
+      // Etichette asse X (anni)
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      const stepX = Math.max(1, Math.ceil((series.length - 1) / 8));
+      series.forEach((pt, idx) => {
+        if (idx % stepX === 0 || idx === series.length - 1) {
+          const x = getX(idx);
+          ctx.fillStyle = '#64748b';
+          ctx.fillText(idx === 0 ? 'Oggi' : `${pt.year}a`, x, padTop + plotH + 8);
+        }
+      });
+
+      // Area sotto la curva Valore Stimato (blu sfumato)
+      const gradValue = ctx.createLinearGradient(0, padTop, 0, padTop + plotH);
+      gradValue.addColorStop(0, 'rgba(26, 115, 232, 0.24)');
+      gradValue.addColorStop(1, 'rgba(26, 115, 232, 0.02)');
+
+      ctx.beginPath();
+      series.forEach((pt, idx) => {
+        const x = getX(idx);
+        const y = getY(pt.value);
+        if (idx === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.lineTo(getX(series.length - 1), padTop + plotH);
+      ctx.lineTo(getX(0), padTop + plotH);
+      ctx.closePath();
+      ctx.fillStyle = gradValue;
+      ctx.fill();
+
+      // Area sotto Capitale Versato (grigio chiaro)
+      ctx.beginPath();
+      series.forEach((pt, idx) => {
+        const x = getX(idx);
+        const y = getY(pt.invested);
+        if (idx === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.lineTo(getX(series.length - 1), padTop + plotH);
+      ctx.lineTo(getX(0), padTop + plotH);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(100, 116, 139, 0.12)';
+      ctx.fill();
+
+      // Linea Capitale Versato (tratteggiata)
+      ctx.save();
+      ctx.setLineDash([5, 4]);
+      ctx.strokeStyle = '#64748b';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      series.forEach((pt, idx) => {
+        const x = getX(idx);
+        const y = getY(pt.invested);
+        if (idx === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+      ctx.restore();
+
+      // Linea Valore Stimato Portafoglio (continua blu)
+      ctx.strokeStyle = '#1a73e8';
+      ctx.lineWidth = 2.8;
+      ctx.beginPath();
+      series.forEach((pt, idx) => {
+        const x = getX(idx);
+        const y = getY(pt.value);
+        if (idx === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+
+      // Salva coordinate per tooltip interattivo
+      chartPointsCache = series.map((pt, idx) => ({
+        x: getX(idx),
+        yVal: getY(pt.value),
+        yInv: getY(pt.invested),
+        data: pt
+      }));
+    }
+
+    /**
+     * Gestione Tooltip interattivo sul grafico Canvas (mouse e touch)
+     */
+    function initChartTooltip() {
+      const canvas = document.getElementById('growthChartCanvas');
+      const tooltip = document.getElementById('chartTooltip');
+      const container = document.getElementById('chartContainer');
+
+      function handlePointer(clientX) {
+        if (!chartPointsCache.length) return;
+        const rect = canvas.getBoundingClientRect();
+        const relX = clientX - rect.left;
+
+        let closest = chartPointsCache[0];
+        let minDist = Math.abs(relX - closest.x);
+        for (const pt of chartPointsCache) {
+          const d = Math.abs(relX - pt.x);
+          if (d < minDist) {
+            minDist = d;
+            closest = pt;
+          }
+        }
+
+        const gain = closest.data.value - closest.data.invested;
+        tooltip.innerHTML = `
+          <div style="font-weight: 700; margin-bottom: 3px; color: #93c5fd;">
+            ${closest.data.year === 0 ? 'Partenza (Anno 0)' : `Anno ${closest.data.year}`}
+          </div>
+          <div>Valore Stimato: <strong>${formatEuro(closest.data.value)}</strong></div>
+          <div>Capitale Versato: <strong>${formatEuro(closest.data.invested)}</strong></div>
+          <div style="color: #86efac;">Guadagno Stimato: <strong>+${formatEuro(gain)}</strong></div>
+        `;
+
+        tooltip.style.opacity = '1';
+        const containerW = container.clientWidth;
+        const tipW = tooltip.offsetWidth || 180;
+        let leftPos = closest.x + 14;
+        if (leftPos + tipW > containerW - 10) {
+          leftPos = Math.max(10, closest.x - tipW - 14);
+        }
+        tooltip.style.left = `${leftPos}px`;
+        tooltip.style.top = '18px';
+      }
+
+      canvas.addEventListener('mousemove', (e) => handlePointer(e.clientX));
+      canvas.addEventListener('touchstart', (e) => {
+        if (e.touches[0]) handlePointer(e.touches[0].clientX);
+      }, { passive: true });
+      canvas.addEventListener('touchmove', (e) => {
+        if (e.touches[0]) handlePointer(e.touches[0].clientX);
+      }, { passive: true });
+
+      canvas.addEventListener('mouseleave', () => {
+        tooltip.style.opacity = '0';
+      });
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    /**
+     * Inizializzazione controlli principali, ribilanciamento, export/import e download HTML
+     */
+    function initControls() {
+      const budgetInput = document.getElementById('monthlyBudgetInput');
+      const budgetSlider = document.getElementById('monthlyBudgetSlider');
+
+      budgetInput.value = state.monthlyBudget;
+      budgetSlider.value = state.monthlyBudget;
+      if (state.monthlyBudget > Number(budgetSlider.max)) {
+        budgetSlider.max = state.monthlyBudget;
+      }
+
+      budgetInput.addEventListener('input', (e) => {
+        const val = e.target.value === '' ? 0 : Math.max(0, Number(e.target.value) || 0);
+        state.monthlyBudget = val;
+        if (val > Number(budgetSlider.max)) budgetSlider.max = val;
+        budgetSlider.value = val;
+        persistState();
+        updateAllViews();
+      });
+
+      budgetSlider.addEventListener('input', (e) => {
+        const val = Math.max(0, Number(e.target.value) || 0);
+        state.monthlyBudget = val;
+        budgetInput.value = val;
+        persistState();
+        updateAllViews();
+      });
+
+      // Ribilancia al 100%
+      document.getElementById('btnRebalance').addEventListener('click', () => {
+        const target = Math.max(0, Number(state.monthlyBudget) || 0);
+        if (state.etfs.length === 0) {
+          showToast('Aggiungi almeno un ETF prima di ribilanciare', true);
+          return;
+        }
+
+        const currentSum = state.etfs.reduce((sum, e) => sum + Math.max(0, Number(e.amount) || 0), 0);
+
+        if (currentSum === 0) {
+          // Distribuzione equa se tutti a zero
+          const equalShare = Math.floor(target / state.etfs.length);
+          let remainder = target - equalShare * state.etfs.length;
+          state.etfs.forEach((etf, idx) => {
+            etf.amount = equalShare + (idx < remainder ? 1 : 0);
+          });
+        } else {
+          // Scala proporzionalmente arrotondando all'euro intero e compensando l'eventuale resto sull'ETF più grande
+          let runningSum = 0;
+          let maxIdx = 0;
+          state.etfs.forEach((etf, idx) => {
+            if (etf.amount > state.etfs[maxIdx].amount) maxIdx = idx;
+            const scaled = Math.round((etf.amount / currentSum) * target);
+            etf.amount = scaled;
+            runningSum += scaled;
+          });
+          const diff = target - runningSum;
+          state.etfs[maxIdx].amount = Math.max(0, state.etfs[maxIdx].amount + diff);
+        }
+
+        persistState();
+        renderEtfList();
+        showToast(`Portafoglio ribilanciato su ${formatEuro(target)}`);
+      });
+
+      // Aggiungi nuovo ETF
+      document.getElementById('btnAddEtf').addEventListener('click', () => {
+        const nextColor = PALETTE[state.etfs.length % PALETTE.length];
+        state.etfs.push({
+          id: 'etf_' + Date.now(),
+          name: 'Nuovo ETF (Acc)',
+          amount: 0,
+          color: nextColor
+        });
+        persistState();
+        renderEtfList();
+
+        const inputs = document.querySelectorAll('.etf-name-input');
+        const lastInput = inputs[inputs.length - 1];
+        if (lastInput) {
+          lastInput.focus();
+          lastInput.select();
+        }
+      });
+
+      // Controlli Simulazione
+      const yearsSlider = document.getElementById('simYearsSlider');
+      const returnSlider = document.getElementById('simReturnSlider');
+      const initialInput = document.getElementById('simInitialInput');
+      const initialSlider = document.getElementById('simInitialSlider');
+
+      yearsSlider.value = state.simulation.years;
+      returnSlider.value = state.simulation.annualReturn;
+      initialInput.value = state.simulation.initialCapital;
+      initialSlider.value = state.simulation.initialCapital;
+      if (state.simulation.initialCapital > Number(initialSlider.max)) {
+        initialSlider.max = state.simulation.initialCapital;
+      }
+
+      yearsSlider.addEventListener('input', (e) => {
+        state.simulation.years = Number(e.target.value) || 15;
+        persistState();
+        updateAllViews();
+      });
+
+      returnSlider.addEventListener('input', (e) => {
+        state.simulation.annualReturn = Number(e.target.value) || 0;
+        persistState();
+        updateAllViews();
+      });
+
+      initialInput.addEventListener('input', (e) => {
+        const val = e.target.value === '' ? 0 : Math.max(0, Number(e.target.value) || 0);
+        state.simulation.initialCapital = val;
+        if (val > Number(initialSlider.max)) initialSlider.max = val;
+        initialSlider.value = val;
+        persistState();
+        updateAllViews();
+      });
+
+      initialSlider.addEventListener('input', (e) => {
+        const val = Math.max(0, Number(e.target.value) || 0);
+        state.simulation.initialCapital = val;
+        initialInput.value = val;
+        persistState();
+        updateAllViews();
+      });
+
+      // Esporta JSON
+      document.getElementById('btnExportJson').addEventListener('click', () => {
+        const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `backup_pac_trade_republic_${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('Backup JSON esportato');
+      });
+
+      // Importa JSON
+      document.getElementById('inputImportJson').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          try {
+            const imported = JSON.parse(ev.target.result);
+            if (imported && Array.isArray(imported.etfs) && imported.simulation) {
+              state = imported;
+              budgetInput.value = state.monthlyBudget;
+              budgetSlider.value = state.monthlyBudget;
+              yearsSlider.value = state.simulation.years;
+              returnSlider.value = state.simulation.annualReturn;
+              initialInput.value = state.simulation.initialCapital;
+              initialSlider.value = state.simulation.initialCapital;
+              persistState();
+              renderEtfList();
+              showToast('Backup JSON importato con successo');
+            } else {
+              showToast('File JSON non valido', true);
+            }
+          } catch (err) {
+            showToast('Errore lettura file JSON', true);
+          }
+          e.target.value = '';
+        };
+        reader.readAsText(file);
+      });
+
+      // Scarica App (.html) con dati attuali incorporati
+      document.getElementById('btnDownloadHtml').addEventListener('click', () => {
+        try {
+          const docClone = document.documentElement.cloneNode(true);
+          const embeddedTag = docClone.querySelector('#embedded-pac-data');
+          if (embeddedTag) {
+            embeddedTag.textContent = JSON.stringify(state);
+          }
+
+          const htmlContent = '<!DOCTYPE html>\n' + docClone.outerHTML;
+          const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'Piano_PAC_Trade_Republic.html';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          showToast('Web App HTML scaricata con i dati aggiornati!');
+        } catch (err) {
+          showToast('Errore durante il download HTML', true);
+        }
+      });
+
+      // Modal Ripristina predefiniti
+      const resetModal = document.getElementById('resetModal');
+      document.getElementById('btnReset').addEventListener('click', () => resetModal.classList.add('open'));
+      document.getElementById('btnCancelReset').addEventListener('click', () => resetModal.classList.remove('open'));
+      document.getElementById('btnConfirmReset').addEventListener('click', () => {
+        state = JSON.parse(JSON.stringify(INITIAL_STATE));
+        budgetInput.value = state.monthlyBudget;
+        budgetSlider.value = state.monthlyBudget;
+        yearsSlider.value = state.simulation.years;
+        returnSlider.value = state.simulation.annualReturn;
+        initialInput.value = state.simulation.initialCapital;
+        initialSlider.value = state.simulation.initialCapital;
+        persistState();
+        renderEtfList();
+        resetModal.classList.remove('open');
+        showToast('Valori predefiniti ripristinati');
+      });
+
+      // Ridisegna grafico al ridimensionamento finestra
+      window.addEventListener('resize', () => {
+        const totalAllocated = state.etfs.reduce((sum, e) => sum + Math.max(0, Number(e.amount) || 0), 0);
+        updateSimulationView(totalAllocated);
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initControls();
+      initChartTooltip();
+      renderEtfList();
+    });
+  </script>
+
+</body></html>

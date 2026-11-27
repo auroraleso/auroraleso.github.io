@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="it"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Piano di Risparmio Personale</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    /* Stile base e fallback offline nel caso Tailwind CDN non sia raggiungibile */
+    :root {
+      --bg-page: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --blue: #1a73e8;
+      --yellow: #fbbc04;
+      --green: #34a853;
+      --red: #ea4335;
+      --teal: #00897b;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Personalizzazione fluida degli slider range */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      outline: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--thumb-color, #1a73e8);
+      cursor: pointer;
+      border: 2px solid #ffffff;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--thumb-color, #1a73e8);
+      cursor: pointer;
+      border: 2px solid #ffffff;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+      transition: transform 0.15s ease;
+    }
+
+    /* Rimozione frecce input numerici per pulizia estetica */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    /* Animazioni soft */
+    .fade-in {
+      animation: fadeIn 0.25s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Transizione segmenti SVG Donut */
+    .donut-segment {
+      transition: stroke-dasharray 0.35s ease, stroke-dashoffset 0.35s ease, stroke-width 0.2s ease;
+      cursor: pointer;
+    }
+    .donut-segment:hover {
+      stroke-width: 24;
+    }
+  </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.bottom-5{bottom:1.25rem}.left-3\.5{left:0.875rem}.right-5{right:1.25rem}.top-0{top:0px}.right-2{right:0.5rem}.z-30{z-index:30}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-6{margin-bottom:1.5rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-1\.5{height:0.375rem}.h-2{height:0.5rem}.h-3\.5{height:0.875rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-56{height:14rem}.h-9{height:2.25rem}.h-full{height:100%}.h-2\.5{height:0.625rem}.h-3{height:0.75rem}.min-h-screen{min-height:100vh}.w-1\.5{width:0.375rem}.w-2{width:0.5rem}.w-3\.5{width:0.875rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-56{width:14rem}.w-9{width:2.25rem}.w-full{width:100%}.w-14{width:3.5rem}.w-20{width:5rem}.w-3{width:0.75rem}.max-w-5xl{max-width:64rem}.max-w-md{max-width:28rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.translate-y-20{--tw-translate-y:5rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-rotate-90{--tw-rotate:-90deg;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-1\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.375rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.375rem * var(--tw-space-y-reverse))}.space-y-2\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.625rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.625rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-visible{overflow:visible}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-xl{border-radius:0.75rem}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-emerald-200{--tw-border-opacity:1;border-color:rgb(167 243 208 / var(--tw-border-opacity, 1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-slate-200\/80{border-color:rgb(226 232 240 / 0.8)}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.border-slate-100{--tw-border-opacity:1;border-color:rgb(241 245 249 / var(--tw-border-opacity, 1))}.border-slate-200\/70{border-color:rgb(226 232 240 / 0.7)}.border-transparent{border-color:transparent}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-emerald-400{--tw-bg-opacity:1;background-color:rgb(52 211 153 / var(--tw-bg-opacity, 1))}.bg-emerald-50\/70{background-color:rgb(236 253 245 / 0.7)}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.bg-red-100{--tw-bg-opacity:1;background-color:rgb(254 226 226 / var(--tw-bg-opacity, 1))}.bg-red-600{--tw-bg-opacity:1;background-color:rgb(220 38 38 / var(--tw-bg-opacity, 1))}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-slate-900\/50{background-color:rgb(15 23 42 / 0.5)}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-white\/90{background-color:rgb(255 255 255 / 0.9)}.bg-emerald-50\/80{background-color:rgb(236 253 245 / 0.8)}.bg-slate-50\/70{background-color:rgb(248 250 252 / 0.7)}.bg-slate-50\/90{background-color:rgb(248 250 252 / 0.9)}.bg-transparent{background-color:transparent}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-1\.5{padding:0.375rem}.p-3\.5{padding:0.875rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-4{padding-top:1rem;padding-bottom:1rem}.pb-16{padding-bottom:4rem}.pl-9{padding-left:2.25rem}.pr-4{padding-right:1rem}.pt-4{padding-top:1rem}.pt-6{padding-top:1.5rem}.pl-2{padding-left:0.5rem}.pr-5{padding-right:1.25rem}.text-center{text-align:center}.text-right{text-align:right}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.tabular-nums{--tw-numeric-spacing:tabular-nums;font-variant-numeric:var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.text-emerald-600{--tw-text-opacity:1;color:rgb(5 150 105 / var(--tw-text-opacity, 1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87 / var(--tw-text-opacity, 1))}.text-red-700{--tw-text-opacity:1;color:rgb(185 28 28 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.text-teal-700{--tw-text-opacity:1;color:rgb(15 118 110 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.opacity-0{opacity:0}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.hover\:border-slate-300:hover{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.hover\:border-slate-400:hover{--tw-border-opacity:1;border-color:rgb(148 163 184 / var(--tw-border-opacity, 1))}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:bg-red-50:hover{--tw-bg-opacity:1;background-color:rgb(254 242 242 / var(--tw-bg-opacity, 1))}.hover\:bg-red-700:hover{--tw-bg-opacity:1;background-color:rgb(185 28 28 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-200:hover{--tw-bg-opacity:1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.hover\:bg-white:hover{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.hover\:text-red-600:hover{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.hover\:text-slate-900:hover{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.focus\:border-blue-500:focus{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.focus\:bg-white:focus{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-blue-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(59 130 246 / var(--tw-ring-opacity, 1))}@media (min-width: 640px){.sm\:col-span-1{grid-column:span 1 / span 1}.sm\:inline{display:inline}.sm\:hidden{display:none}.sm\:h-64{height:16rem}.sm\:w-64{width:16rem}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:flex-row{flex-direction:row}.sm\:items-center{align-items:center}.sm\:p-5{padding:1.25rem}.sm\:p-7{padding:1.75rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}}@media (min-width: 768px){.md\:col-span-5{grid-column:span 5 / span 5}.md\:col-span-7{grid-column:span 7 / span 7}.md\:inline{display:inline}.md\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}@media (min-width: 1024px){.lg\:col-span-4{grid-column:span 4 / span 4}.lg\:col-span-8{grid-column:span 8 / span 8}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}}</style></head>
+<body class="min-h-screen bg-slate-50 text-slate-900 pb-16">
+
+  <!-- Barra superiore di gestione e salvataggio -->
+  <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-xs">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-4h-2c0-1-.5-1.5-1-2V5z"></path>
+            <path d="M2 9v1c0 1.1.9 2 2 2h1"></path>
+            <path d="M16 11h.01"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">Piano di Risparmio Personale</h1>
+          <p id="saveStatus" class="text-xs text-emerald-600 font-medium flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
+            Salvato automaticamente nel browser
+          </p>
+        </div>
+      </div>
+
+      <!-- Pulsanti Portabilità e Salvataggio -->
+      <div class="flex flex-wrap items-center gap-2">
+        <button id="btnDownloadHtml" type="button" title="Scarica una copia HTML completa con i tuoi dati attuali incorporati" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-xs transition cursor-pointer">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>Scarica App (.html)</span>
+        </button>
+
+        <button id="btnExportJson" type="button" title="Esporta i dati in formato JSON" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition cursor-pointer">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><polyline points="9 15 12 18 15 15"></polyline></svg>
+          <span class="hidden sm:inline">Backup (.json)</span>
+          <span class="sm:hidden">Esporta</span>
+        </button>
+
+        <label for="inputImportJson" title="Importa un file di backup JSON" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition cursor-pointer">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <span class="hidden sm:inline">Importa</span>
+        </label>
+        <input type="file" id="inputImportJson" accept=".json,application/json" class="hidden">
+
+        <button id="btnReset" type="button" title="Ripristina i valori iniziali predefiniti" class="inline-flex items-center gap-1 px-2.5 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-500 hover:text-red-600 hover:bg-red-50 transition cursor-pointer">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+          <span class="hidden md:inline">Ripristina</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 pt-6 space-y-6">
+
+    <!-- 1. HERO CARD: Riepilogo Principale ed Entrata Mensile -->
+    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-7">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+        
+        <!-- Input Entrata Netta Mensile -->
+        <div class="lg:col-span-4 bg-slate-50 rounded-2xl p-4 sm:p-5 border border-slate-200/80">
+          <label for="incomeInput" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
+            Entrata netta mensile
+          </label>
+          <div class="relative flex items-center">
+            <span class="absolute left-3.5 text-lg font-bold text-slate-400">€</span>
+            <input id="incomeInput" type="number" min="0" step="10" value="0" class="w-full pl-9 pr-4 py-2.5 text-2xl font-bold text-slate-900 bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+          </div>
+          <p class="text-xs text-slate-500 mt-2">
+            Modifica lo stipendio netto per ricalcolare subito percentuali e avanzo.
+          </p>
+        </div>
+
+        <!-- KPI Principali in Tempo Reale -->
+        <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <!-- Avanzo libero mensile -->
+          <div id="surplusCard" class="sm:col-span-1 rounded-2xl p-4 sm:p-5 border transition-colors bg-emerald-50/80 border-emerald-200">
+            <span class="block text-xs font-semibold text-slate-600 mb-1">
+              Avanzo libero mensile
+            </span>
+            <div id="surplusValue" class="text-2xl sm:text-3xl font-extrabold text-emerald-700 tracking-tight">0 €</div>
+            <span class="block text-[11px] text-slate-500 mt-1">
+              Dopo spese e PAC
+            </span>
+          </div>
+
+          <!-- Totale uscite e accantonamenti -->
+          <div class="rounded-2xl p-4 sm:p-5 bg-slate-50 border border-slate-200/80">
+            <span class="block text-xs font-semibold text-slate-600 mb-1">
+              Totale uscite e PAC
+            </span>
+            <div id="totalExpensesValue" class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">0 €</div>
+            <span id="expensesRatioText" class="block text-[11px] text-slate-500 mt-1">74,6% dell'entrata</span>
+          </div>
+
+          <!-- Tasso di risparmio libero & Proiezione annuale -->
+          <div class="rounded-2xl p-4 sm:p-5 bg-slate-50 border border-slate-200/80">
+            <span class="block text-xs font-semibold text-slate-600 mb-1">
+              Tasso risparmio libero
+            </span>
+            <div id="savingsRateValue" class="text-2xl sm:text-3xl font-bold text-teal-700 tracking-tight">25,4%</div>
+            <span id="annualProjectionValue" class="block text-[11px] font-medium text-slate-600 mt-1">Proiezione: +0 €/anno</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 2. GRAFICO A CIAMBELLA (SVG PURO) E BARRE DI RIPARTIZIONE -->
+    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-7">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Ripartizione Visiva del Budget</h2>
+          <p class="text-xs sm:text-sm text-slate-500">Distribuzione percentuale tra categorie di spesa, investimenti e avanzo libero</p>
+        </div>
+        <span id="budgetWarningBadge" class="hidden inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          Attenzione: uscite superiori all'entrata!
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+        <!-- Grafico Donut SVG -->
+        <div class="md:col-span-5 flex flex-col items-center justify-center">
+          <div class="relative w-56 h-56 sm:w-64 sm:h-64">
+            <svg id="donutSvg" viewBox="0 0 200 200" class="w-full h-full -rotate-90 overflow-visible">
+              <!-- Cerchio di sfondo -->
+              <circle cx="100" cy="100" r="76" fill="transparent" stroke="#f1f5f9" stroke-width="20"></circle>
+              <!-- I segmenti vengono generati dinamicamente via JS -->
+              <g id="donutSegments">
+            <circle cx="100" cy="100" r="76" fill="transparent" stroke="#1a73e8" stroke-width="20" stroke-dasharray="64.53001126292548 477.5220833456485" stroke-dashoffset="0" class="donut-segment" data-label="Casa e Utenze" data-amount="0 €" data-percent="13,5%">
+              <title>Casa e Utenze: 0 € (13,5%)</title>
+            </circle>
+          
+            <circle cx="100" cy="100" r="76" fill="transparent" stroke="#fbbc04" stroke-width="20" stroke-dasharray="72.27361261447653 477.5220833456485" stroke-dashoffset="-64.53001126292548" class="donut-segment" data-label="Mobilità (Auto e Moto)" data-amount="0 €" data-percent="15,1%">
+              <title>Mobilità (Auto e Moto): 0 € (15,1%)</title>
+            </circle>
+          
+            <circle cx="100" cy="100" r="76" fill="transparent" stroke="#34a853" stroke-width="20" stroke-dasharray="141.96602477843606 477.5220833456485" stroke-dashoffset="-136.803623877402" class="donut-segment" data-label="Spesa, Sport e Svago" data-amount="0 €" data-percent="29,7%">
+              <title>Spesa, Sport e Svago: 0 € (29,7%)</title>
+            </circle>
+          
+            <circle cx="100" cy="100" r="76" fill="transparent" stroke="#ea4335" stroke-width="20" stroke-dasharray="77.43601351551058 477.5220833456485" stroke-dashoffset="-278.76964865583807" class="donut-segment" data-label="Investimenti" data-amount="0 €" data-percent="16,2%">
+              <title>Investimenti: 0 € (16,2%)</title>
+            </circle>
+          
+            <circle cx="100" cy="100" r="76" fill="transparent" stroke="#00897b" stroke-width="20" stroke-dasharray="121.3164211742999 477.5220833456485" stroke-dashoffset="-356.20566217134865" class="donut-segment" data-label="Avanzo Libero" data-amount="0 €" data-percent="25,4%">
+              <title>Avanzo Libero: 0 € (25,4%)</title>
+            </circle>
+          </g>
+            </svg>
+            <!-- Testo centrale nel foro della ciambella -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none px-4">
+              <span id="donutCenterLabel" class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Avanzo Libero</span>
+              <span id="donutCenterAmount" class="text-xl sm:text-2xl font-extrabold text-teal-700 mt-0.5">0 €</span>
+              <span id="donutCenterSub" class="text-xs font-medium text-slate-500 mt-0.5">25,4% dell'entrata</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Legenda e Barre Orizzontali Proporzionali -->
+        <div id="breakdownBarsContainer" class="md:col-span-7 space-y-4">
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center gap-2 font-medium text-slate-800">
+                <span class="w-3 h-3 rounded-full shrink-0" style="background-color: #1a73e8;"></span>
+                <span>Casa e Utenze</span>
+              </div>
+              <div class="flex items-center gap-2.5 tabular-nums">
+                <span class="font-bold text-slate-900">0 €</span>
+                <span class="text-xs font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 w-14 text-right">
+                  13,5%
+                </span>
+              </div>
+            </div>
+            <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+              <div class="h-full rounded-full transition-all duration-300" style="width: 13.513513513513514%; background-color: #1a73e8;"></div>
+            </div>
+          </div>
+        
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center gap-2 font-medium text-slate-800">
+                <span class="w-3 h-3 rounded-full shrink-0" style="background-color: #fbbc04;"></span>
+                <span>Mobilità (Auto e Moto)</span>
+              </div>
+              <div class="flex items-center gap-2.5 tabular-nums">
+                <span class="font-bold text-slate-900">0 €</span>
+                <span class="text-xs font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 w-14 text-right">
+                  15,1%
+                </span>
+              </div>
+            </div>
+            <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+              <div class="h-full rounded-full transition-all duration-300" style="width: 15.135135135135137%; background-color: #fbbc04;"></div>
+            </div>
+          </div>
+        
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center gap-2 font-medium text-slate-800">
+                <span class="w-3 h-3 rounded-full shrink-0" style="background-color: #34a853;"></span>
+                <span>Spesa, Sport e Svago</span>
+              </div>
+              <div class="flex items-center gap-2.5 tabular-nums">
+                <span class="font-bold text-slate-900">0 €</span>
+                <span class="text-xs font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 w-14 text-right">
+                  29,7%
+                </span>
+              </div>
+            </div>
+            <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+              <div class="h-full rounded-full transition-all duration-300" style="width: 29.72972972972973%; background-color: #34a853;"></div>
+            </div>
+          </div>
+        
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center gap-2 font-medium text-slate-800">
+                <span class="w-3 h-3 rounded-full shrink-0" style="background-color: #ea4335;"></span>
+                <span>Investimenti</span>
+              </div>
+              <div class="flex items-center gap-2.5 tabular-nums">
+                <span class="font-bold text-slate-900">0 €</span>
+                <span class="text-xs font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 w-14 text-right">
+                  16,2%
+                </span>
+              </div>
+            </div>
+            <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+              <div class="h-full rounded-full transition-all duration-300" style="width: 16.216216216216218%; background-color: #ea4335;"></div>
+            </div>
+          </div>
+        
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center gap-2 font-medium text-slate-800">
+                <span class="w-3 h-3 rounded-full shrink-0" style="background-color: #00897b;"></span>
+                <span>Avanzo Libero</span>
+              </div>
+              <div class="flex items-center gap-2.5 tabular-nums">
+                <span class="font-bold text-slate-900">0 €</span>
+                <span class="text-xs font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 w-14 text-right">
+                  25,4%
+                </span>
+              </div>
+            </div>
+            <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+              <div class="h-full rounded-full transition-all duration-300" style="width: 25.405405405405407%; background-color: #00897b;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. CATEGORIE E VOCI MODIFICABILI -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Dettaglio Categorie e Voci</h2>
+          <p class="text-xs sm:text-sm text-slate-500">Usa gli slider o digita l'importo esatto. Clicca sul nome di una voce per rinominarla.</p>
+        </div>
+      </div>
+
+      <div id="categoriesContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+            <!-- Intestazione Categoria -->
+            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between gap-2" style="border-left: 5px solid #1a73e8;">
+              <div class="flex items-center gap-2.5">
+                <span class="w-3 h-3 rounded-full shrink-0" style="background-color: #1a73e8;"></span>
+                <h3 class="font-bold text-slate-900 text-base">Casa e Utenze</h3>
+              </div>
+              <span id="cat-total-housing" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 tabular-nums">0 € (13,5%)</span>
+            </div>
+
+            <!-- Lista Voci -->
+            <div class="p-4 sm:p-5 space-y-3 flex-1">
+              
+            <div class="p-3.5 rounded-xl bg-slate-50/90 border border-slate-200/70 hover:border-slate-300 transition space-y-2.5 group">
+              <div class="flex items-center justify-between gap-2">
+                <!-- Nome voce modificabile cliccandoci sopra -->
+                <input type="text" value="Bollette (Luce, Gas, Acqua, Internet)" aria-label="Nome voce" title="Clicca per rinominare questa voce" data-cat-idx="0" data-item-idx="0" class="item-label-input flex-1 text-sm font-medium text-slate-800 bg-transparent border border-transparent hover:border-slate-300 focus:bg-white focus:border-blue-500 focus:outline-none rounded-lg px-1.5 py-0.5 transition truncate">
+
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <!-- Campo numerico diretto (€) sincronizzato con lo slider -->
+                  <div class="relative flex items-center">
+                    <input type="number" min="0" step="1" value="0" aria-label="Importo in euro per Bollette (Luce, Gas, Acqua, Internet)" data-cat-idx="0" data-item-idx="0" class="item-number-input w-20 pr-5 pl-2 py-1 text-right text-sm font-bold text-slate-900 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 tabular-nums">
+                    <span class="absolute right-2 text-xs font-semibold text-slate-400 pointer-events-none">€</span>
+                  </div>
+
+                  <!-- Pulsante elimina voce -->
+                  <button type="button" title="Elimina voce" data-cat-idx="0" data-item-idx="0" class="btn-delete-item p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Slider fluido -->
+              <div class="flex items-center gap-3">
+                <input type="range" min="0" max="600" step="5" value="0" style="--thumb-color: #1a73e8;" data-cat-idx="0" data-item-idx="0" class="item-range-input">
+              </div>
+            </div>
+          
+            </div>
+
+            <!-- Footer Card: Pulsante Aggiungi Voce -->
+            <div class="px-5 py-3 bg-slate-50/70 border-t border-slate-100">
+              <button type="button" data-cat-idx="0" class="btn-add-item w-full py-2 px-3 rounded-xl border border-dashed border-slate-300 hover:border-slate-400 hover:bg-white text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 transition cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>Aggiungi voce in Casa e Utenze</span>
+              </button>
+            </div>
+          </div>
+        
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+            <!-- Intestazione Categoria -->
+            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between gap-2" style="border-left: 5px solid #fbbc04;">
+              <div class="flex items-center gap-2.5">
+                <span class="w-3 h-3 rounded-full shrink-0" style="background-color: #fbbc04;"></span>
+                <h3 class="font-bold text-slate-900 text-base">Mobilità (Auto e Moto)</h3>
+              </div>
+              <span id="cat-total-mobility" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 tabular-nums">0 € (15,1%)</span>
+            </div>
+
+            <!-- Lista Voci -->
+            <div class="p-4 sm:p-5 space-y-3 flex-1">
+              
+            <div class="p-3.5 rounded-xl bg-slate-50/90 border border-slate-200/70 hover:border-slate-300 transition space-y-2.5 group">
+              <div class="flex items-center justify-between gap-2">
+                <!-- Nome voce modificabile cliccandoci sopra -->
+                <input type="text" value="Carburante" aria-label="Nome voce" title="Clicca per rinominare questa voce" data-cat-idx="1" data-item-idx="0" class="item-label-input flex-1 text-sm font-medium text-slate-800 bg-transparent border border-transparent hover:border-slate-300 focus:bg-white focus:border-blue-500 focus:outline-none rounded-lg px-1.5 py-0.5 transition truncate">
+
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <!-- Campo numerico diretto (€) sincronizzato con lo slider -->
+                  <div class="relative flex items-center">
+                    <input type="number" min="0" step="1" value="0" aria-label="Importo in euro per Carburante" data-cat-idx="1" data-item-idx="0" class="item-number-input w-20 pr-5 pl-2 py-1 text-right text-sm font-bold text-slate-900 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 tabular-nums">
+                    <span class="absolute right-2 text-xs font-semibold text-slate-400 pointer-events-none">€</span>
+                  </div>
+
+                  <!-- Pulsante elimina voce -->
+                  <button type="button" title="Elimina voce" data-cat-idx="1" data-item-idx="0" class="btn-delete-item p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Slider fluido -->
+              <div class="flex items-center gap-3">
+                <input type="range" min="0" max="600" step="5" value="0" style="--thumb-color: #fbbc04;" data-cat-idx="1" data-item-idx="0" class="item-range-input">
+              </div>
+            </div>
+          
+            <div class="p-3.5 rounded-xl bg-slate-50/90 border border-slate-200/70 hover:border-slate-300 transition space-y-2.5 group">
+              <div class="flex items-center justify-between gap-2">
+                <!-- Nome voce modificabile cliccandoci sopra -->
+                <input type="text" value="Assicurazione e bollo (accantonamento)" aria-label="Nome voce" title="Clicca per rinominare questa voce" data-cat-idx="1" data-item-idx="1" class="item-label-input flex-1 text-sm font-medium text-slate-800 bg-transparent border border-transparent hover:border-slate-300 focus:bg-white focus:border-blue-500 focus:outline-none rounded-lg px-1.5 py-0.5 transition truncate">
+
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <!-- Campo numerico diretto (€) sincronizzato con lo slider -->
+                  <div class="relative flex items-center">
+                    <input type="number" min="0" step="1" value="0" aria-label="Importo in euro per Assicurazione e bollo (accantonamento)" data-cat-idx="1" data-item-idx="1" class="item-number-input w-20 pr-5 pl-2 py-1 text-right text-sm font-bold text-slate-900 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 tabular-nums">
+                    <span class="absolute right-2 text-xs font-semibold text-slate-400 pointer-events-none">€</span>
+                  </div>
+
+                  <!-- Pulsante elimina voce -->
+                  <button type="button" title="Elimina voce" data-cat-idx="1" data-item-idx="1" class="btn-delete-item p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Slider fluido -->
+              <div class="flex items-center gap-3">
+                <input type="range" min="0" max="400" step="5" value="0" style="--thumb-color: #fbbc04;" data-cat-idx="1" data-item-idx="1" class="item-range-input">
+              </div>
+            </div>
+          
+            </div>
+
+            <!-- Footer Card: Pulsante Aggiungi Voce -->
+            <div class="px-5 py-3 bg-slate-50/70 border-t border-slate-100">
+              <button type="button" data-cat-idx="1" class="btn-add-item w-full py-2 px-3 rounded-xl border border-dashed border-slate-300 hover:border-slate-400 hover:bg-white text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 transition cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>Aggiungi voce in Mobilità (Auto e Moto)</span>
+              </button>
+            </div>
+          </div>
+        
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+            <!-- Intestazione Categoria -->
+            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between gap-2" style="border-left: 5px solid #34a853;">
+              <div class="flex items-center gap-2.5">
+                <span class="w-3 h-3 rounded-full shrink-0" style="background-color: #34a853;"></span>
+                <h3 class="font-bold text-slate-900 text-base">Spesa, Sport e Svago</h3>
+              </div>
+              <span id="cat-total-lifestyle" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 tabular-nums">0 € (29,7%)</span>
+            </div>
+
+            <!-- Lista Voci -->
+            <div class="p-4 sm:p-5 space-y-3 flex-1">
+              
+            <div class="p-3.5 rounded-xl bg-slate-50/90 border border-slate-200/70 hover:border-slate-300 transition space-y-2.5 group">
+              <div class="flex items-center justify-between gap-2">
+                <!-- Nome voce modificabile cliccandoci sopra -->
+                <input type="text" value="Spesa alimentare" aria-label="Nome voce" title="Clicca per rinominare questa voce" data-cat-idx="2" data-item-idx="0" class="item-label-input flex-1 text-sm font-medium text-slate-800 bg-transparent border border-transparent hover:border-slate-300 focus:bg-white focus:border-blue-500 focus:outline-none rounded-lg px-1.5 py-0.5 transition truncate">
+
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <!-- Campo numerico diretto (€) sincronizzato con lo slider -->
+                  <div class="relative flex items-center">
+                    <input type="number" min="0" step="1" value="0" aria-label="Importo in euro per Spesa alimentare" data-cat-idx="2" data-item-idx="0" class="item-number-input w-20 pr-5 pl-2 py-1 text-right text-sm font-bold text-slate-900 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 tabular-nums">
+                    <span class="absolute right-2 text-xs font-semibold text-slate-400 pointer-events-none">€</span>
+                  </div>
+
+                  <!-- Pulsante elimina voce -->
+                  <button type="button" title="Elimina voce" data-cat-idx="2" data-item-idx="0" class="btn-delete-item p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Slider fluido -->
+              <div class="flex items-center gap-3">
+                <input type="range" min="0" max="800" step="5" value="0" style="--thumb-color: #34a853;" data-cat-idx="2" data-item-idx="0" class="item-range-input">
+              </div>
+            </div>
+          
+            <div class="p-3.5 rounded-xl bg-slate-50/90 border border-slate-200/70 hover:border-slate-300 transition space-y-2.5 group">
+              <div class="flex items-center justify-between gap-2">
+                <!-- Nome voce modificabile cliccandoci sopra -->
+                <input type="text" value="Sport e Palestra" aria-label="Nome voce" title="Clicca per rinominare questa voce" data-cat-idx="2" data-item-idx="1" class="item-label-input flex-1 text-sm font-medium text-slate-800 bg-transparent border border-transparent hover:border-slate-300 focus:bg-white focus:border-blue-500 focus:outline-none rounded-lg px-1.5 py-0.5 transition truncate">
+
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <!-- Campo numerico diretto (€) sincronizzato con lo slider -->
+                  <div class="relative flex items-center">
+                    <input type="number" min="0" step="1" value="0" aria-label="Importo in euro per Sport e Palestra" data-cat-idx="2" data-item-idx="1" class="item-number-input w-20 pr-5 pl-2 py-1 text-right text-sm font-bold text-slate-900 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 tabular-nums">
+                    <span class="absolute right-2 text-xs font-semibold text-slate-400 pointer-events-none">€</span>
+                  </div>
+
+                  <!-- Pulsante elimina voce -->
+                  <button type="button" title="Elimina voce" data-cat-idx="2" data-item-idx="1" class="btn-delete-item p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Slider fluido -->
+              <div class="flex items-center gap-3">
+                <input type="range" min="0" max="400" step="5" value="0" style="--thumb-color: #34a853;" data-cat-idx="2" data-item-idx="1" class="item-range-input">
+              </div>
+            </div>
+          
+            <div class="p-3.5 rounded-xl bg-slate-50/90 border border-slate-200/70 hover:border-slate-300 transition space-y-2.5 group">
+              <div class="flex items-center justify-between gap-2">
+                <!-- Nome voce modificabile cliccandoci sopra -->
+                <input type="text" value="Svago e Tempo libero" aria-label="Nome voce" title="Clicca per rinominare questa voce" data-cat-idx="2" data-item-idx="2" class="item-label-input flex-1 text-sm font-medium text-slate-800 bg-transparent border border-transparent hover:border-slate-300 focus:bg-white focus:border-blue-500 focus:outline-none rounded-lg px-1.5 py-0.5 transition truncate">
+
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <!-- Campo numerico diretto (€) sincronizzato con lo slider -->
+                  <div class="relative flex items-center">
+                    <input type="number" min="0" step="1" value="0" aria-label="Importo in euro per Svago e Tempo libero" data-cat-idx="2" data-item-idx="2" class="item-number-input w-20 pr-5 pl-2 py-1 text-right text-sm font-bold text-slate-900 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 tabular-nums">
+                    <span class="absolute right-2 text-xs font-semibold text-slate-400 pointer-events-none">€</span>
+                  </div>
+
+                  <!-- Pulsante elimina voce -->
+                  <button type="button" title="Elimina voce" data-cat-idx="2" data-item-idx="2" class="btn-delete-item p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Slider fluido -->
+              <div class="flex items-center gap-3">
+                <input type="range" min="0" max="600" step="5" value="0" style="--thumb-color: #34a853;" data-cat-idx="2" data-item-idx="2" class="item-range-input">
+              </div>
+            </div>
+          
+            <div class="p-3.5 rounded-xl bg-slate-50/90 border border-slate-200/70 hover:border-slate-300 transition space-y-2.5 group">
+              <div class="flex items-center justify-between gap-2">
+                <!-- Nome voce modificabile cliccandoci sopra -->
+                <input type="text" value="Salvadanaio viaggi" aria-label="Nome voce" title="Clicca per rinominare questa voce" data-cat-idx="2" data-item-idx="3" class="item-label-input flex-1 text-sm font-medium text-slate-800 bg-transparent border border-transparent hover:border-slate-300 focus:bg-white focus:border-blue-500 focus:outline-none rounded-lg px-1.5 py-0.5 transition truncate">
+
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <!-- Campo numerico diretto (€) sincronizzato con lo slider -->
+                  <div class="relative flex items-center">
+                    <input type="number" min="0" step="1" value="0" aria-label="Importo in euro per Salvadanaio viaggi" data-cat-idx="2" data-item-idx="3" class="item-number-input w-20 pr-5 pl-2 py-1 text-right text-sm font-bold text-slate-900 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 tabular-nums">
+                    <span class="absolute right-2 text-xs font-semibold text-slate-400 pointer-events-none">€</span>
+                  </div>
+
+                  <!-- Pulsante elimina voce -->
+                  <button type="button" title="Elimina voce" data-cat-idx="2" data-item-idx="3" class="btn-delete-item p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Slider fluido -->
+              <div class="flex items-center gap-3">
+                <input type="range" min="0" max="600" step="5" value="0" style="--thumb-color: #34a853;" data-cat-idx="2" data-item-idx="3" class="item-range-input">
+              </div>
+            </div>
+          
+            </div>
+
+            <!-- Footer Card: Pulsante Aggiungi Voce -->
+            <div class="px-5 py-3 bg-slate-50/70 border-t border-slate-100">
+              <button type="button" data-cat-idx="2" class="btn-add-item w-full py-2 px-3 rounded-xl border border-dashed border-slate-300 hover:border-slate-400 hover:bg-white text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 transition cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>Aggiungi voce in Spesa, Sport e Svago</span>
+              </button>
+            </div>
+          </div>
+        
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+            <!-- Intestazione Categoria -->
+            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between gap-2" style="border-left: 5px solid #ea4335;">
+              <div class="flex items-center gap-2.5">
+                <span class="w-3 h-3 rounded-full shrink-0" style="background-color: #ea4335;"></span>
+                <h3 class="font-bold text-slate-900 text-base">Investimenti</h3>
+              </div>
+              <span id="cat-total-investments" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 tabular-nums">0 € (16,2%)</span>
+            </div>
+
+            <!-- Lista Voci -->
+            <div class="p-4 sm:p-5 space-y-3 flex-1">
+              
+            <div class="p-3.5 rounded-xl bg-slate-50/90 border border-slate-200/70 hover:border-slate-300 transition space-y-2.5 group">
+              <div class="flex items-center justify-between gap-2">
+                <!-- Nome voce modificabile cliccandoci sopra -->
+                <input type="text" value="Quota mensile PAC / Investimenti" aria-label="Nome voce" title="Clicca per rinominare questa voce" data-cat-idx="3" data-item-idx="0" class="item-label-input flex-1 text-sm font-medium text-slate-800 bg-transparent border border-transparent hover:border-slate-300 focus:bg-white focus:border-blue-500 focus:outline-none rounded-lg px-1.5 py-0.5 transition truncate">
+
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <!-- Campo numerico diretto (€) sincronizzato con lo slider -->
+                  <div class="relative flex items-center">
+                    <input type="number" min="0" step="1" value="0" aria-label="Importo in euro per Quota mensile PAC / Investimenti" data-cat-idx="3" data-item-idx="0" class="item-number-input w-20 pr-5 pl-2 py-1 text-right text-sm font-bold text-slate-900 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 tabular-nums">
+                    <span class="absolute right-2 text-xs font-semibold text-slate-400 pointer-events-none">€</span>
+                  </div>
+
+                  <!-- Pulsante elimina voce -->
+                  <button type="button" title="Elimina voce" data-cat-idx="3" data-item-idx="0" class="btn-delete-item p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Slider fluido -->
+              <div class="flex items-center gap-3">
+                <input type="range" min="0" max="1000" step="5" value="0" style="--thumb-color: #ea4335;" data-cat-idx="3" data-item-idx="0" class="item-range-input">
+              </div>
+            </div>
+          
+            </div>
+
+            <!-- Footer Card: Pulsante Aggiungi Voce -->
+            <div class="px-5 py-3 bg-slate-50/70 border-t border-slate-100">
+              <button type="button" data-cat-idx="3" class="btn-add-item w-full py-2 px-3 rounded-xl border border-dashed border-slate-300 hover:border-slate-400 hover:bg-white text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 transition cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>Aggiungi voce in Investimenti</span>
+              </button>
+            </div>
+          </div>
+        </div>
+    </section>
+
+    <!-- Nota informativa a piè di pagina -->
+    <footer class="text-center text-xs text-slate-400 pt-4 space-y-1">
+      <p>I dati vengono salvati automaticamente nella memoria locale del tuo browser (<code class="text-slate-500">localStorage</code>).</p>
+      <p>Usa <strong>"Scarica App (.html)"</strong> in alto per salvare sul tuo dispositivo una copia autonoma con i tuoi dati attuali già inclusi.</p>
+    </footer>
+  </main>
+
+  <!-- Modal / Finestra di Conferma e Notifiche Toast (Nessun alert/confirm nativo) -->
+  <div id="toastNotification" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="bg-slate-900 text-white px-4 py-3 rounded-xl shadow-lg text-sm font-medium flex items-center gap-2.5">
+      <span id="toastIcon" class="w-2 h-2 rounded-full bg-emerald-400"></span>
+      <span id="toastMessage">Operazione completata</span>
+    </div>
+  </div>
+
+  <!-- Modal personalizzato per Conferma Ripristino -->
+  <div id="confirmModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200 fade-in">
+      <h3 class="text-lg font-bold text-slate-900 mb-2">Ripristinare i valori iniziali?</h3>
+      <p class="text-sm text-slate-600 mb-6">
+        Tutte le modifiche personalizzate, le voci aggiunte e l'entrata attuale verranno riportate ai valori predefiniti (0 € di entrata).
+      </p>
+      <div class="flex justify-end gap-3">
+        <button id="btnCancelReset" type="button" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 transition cursor-pointer">
+          Annulla
+        </button>
+        <button id="btnConfirmReset" type="button" class="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-red-600 hover:bg-red-700 transition cursor-pointer">
+          Sì, ripristina tutto
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Blocco Dati Incorporati (usato quando l'utente scarica il file HTML autonomo) -->
+  <script id="embedded-budget-data" type="application/json">null</script>
+
+  <script>
+    /**
+     * Configurazione iniziale predefinita con le categorie e le voci esatte dell'utente
+     */
+    const DEFAULT_STATE = {
+      income: 0,
+      categories: [
+        {
+          id: 'housing',
+          label: 'Casa e Utenze',
+          color: '#1a73e8',
+          open: true,
+          items: [
+            { id: 'utilities', label: 'Bollette (Luce, Gas, Acqua, Internet)', value: 0, min: 0, max: 600, step: 5 }
+          ]
+        },
+        {
+          id: 'mobility',
+          label: 'Mobilità (Auto e Moto)',
+          color: '#fbbc04',
+          open: true,
+          items: [
+            { id: 'fuel', label: 'Carburante', value: 0, min: 0, max: 600, step: 5 },
+            { id: 'insurance_tax', label: 'Assicurazione e bollo (accantonamento)', value: 0, min: 0, max: 400, step: 5 }
+          ]
+        },
+        {
+          id: 'lifestyle',
+          label: 'Spesa, Sport e Svago',
+          color: '#34a853',
+          open: true,
+          items: [
+            { id: 'groceries', label: 'Spesa alimentare', value: 0, min: 0, max: 800, step: 5 },
+            { id: 'sport', label: 'Sport e Palestra', value: 0, min: 0, max: 400, step: 5 },
+            { id: 'fun', label: 'Svago e Tempo libero', value: 0, min: 0, max: 600, step: 5 },
+            { id: 'travel', label: 'Salvadanaio viaggi', value: 0, min: 0, max: 600, step: 5 }
+          ]
+        },
+        {
+          id: 'investments',
+          label: 'Investimenti',
+          color: '#ea4335',
+          open: true,
+          items: [
+            { id: 'pac', label: 'Quota mensile PAC / Investimenti', value: 0, min: 0, max: 1000, step: 5 }
+          ]
+        }
+      ]
+    };
+
+    const STORAGE_KEY = 'piano_risparmio_personale_v1';
+    const SURPLUS_COLOR = '#00897b'; // Verde acqua per Avanzo Libero
+
+    // Stato applicativo corrente
+    let state = loadInitialState();
+
+    /**
+     * Carica lo stato dando priorità a:
+     * 1. Dati incorporati nel file HTML scaricato (se presenti e non null)
+     * 2. localStorage del browser
+     * 3. DEFAULT_STATE
+     */
+    function loadInitialState() {
+      try {
+        const embeddedScript = document.getElementById('embedded-budget-data');
+        if (embeddedScript && embeddedScript.textContent.trim() !== 'null' && embeddedScript.textContent.trim() !== '') {
+          const parsedEmbedded = JSON.parse(embeddedScript.textContent);
+          if (parsedEmbedded && typeof parsedEmbedded.income === 'number' && Array.isArray(parsedEmbedded.categories)) {
+            // Sincronizza anche in localStorage per le modifiche future
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(parsedEmbedded));
+            return parsedEmbedded;
+          }
+        }
+      } catch (e) {
+        console.warn('Errore lettura dati incorporati:', e);
+      }
+
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && typeof parsed.income === 'number' && Array.isArray(parsed.categories)) {
+            return parsed;
+          }
+        }
+      } catch (e) {
+        console.warn('Errore lettura localStorage:', e);
+      }
+
+      return JSON.parse(JSON.stringify(DEFAULT_STATE));
+    }
+
+    /**
+     * Salva lo stato corrente su localStorage e aggiorna l'indicatore visivo
+     */
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        const statusEl = document.getElementById('saveStatus');
+        if (statusEl) {
+          const now = new Date();
+          const timeStr = now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          statusEl.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span> Salvato (${timeStr})`;
+        }
+      } catch (e) {
+        console.error('Impossibile salvare in localStorage:', e);
+      }
+    }
+
+    /**
+     * Formatta numeri in valuta italiana pulita
+     */
+    function formatEuro(amount) {
+      const rounded = Math.round(amount * 100) / 100;
+      return rounded.toLocaleString('it-IT', {
+        minimumFractionDigits: rounded % 1 === 0 ? 0 : 2,
+        maximumFractionDigits: 2
+      }) + ' €';
+    }
+
+    function formatPercent(val) {
+      return val.toLocaleString('it-IT', {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1
+      }) + '%';
+    }
+
+    /**
+     * Mostra una notifica toast non bloccante
+     */
+    let toastTimer = null;
+    function showToast(message, isError = false) {
+      const toast = document.getElementById('toastNotification');
+      const msgEl = document.getElementById('toastMessage');
+      const iconEl = document.getElementById('toastIcon');
+      msgEl.textContent = message;
+      iconEl.className = `w-2 h-2 rounded-full ${isError ? 'bg-red-400' : 'bg-emerald-400'}`;
+      
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+
+    /**
+     * Calcola i totali per categoria, uscite totali, avanzo e percentuali
+     */
+    function calculateMetrics() {
+      const income = Math.max(0, Number(state.income) || 0);
+      let totalExpenses = 0;
+
+      const categoryTotals = state.categories.map(cat => {
+        const sum = cat.items.reduce((acc, item) => acc + Math.max(0, Number(item.value) || 0), 0);
+        totalExpenses += sum;
+        return {
+          id: cat.id,
+          label: cat.label,
+          color: cat.color,
+          amount: sum,
+          percentOfIncome: income > 0 ? (sum / income) * 100 : 0
+        };
+      });
+
+      const surplus = income - totalExpenses;
+      const savingsRate = income > 0 ? (surplus / income) * 100 : 0;
+      const expensesRatio = income > 0 ? (totalExpenses / income) * 100 : 0;
+      const annualSurplus = surplus * 12;
+
+      return {
+        income,
+        totalExpenses,
+        surplus,
+        savingsRate,
+        expensesRatio,
+        annualSurplus,
+        categoryTotals
+      };
+    }
+
+    /**
+     * Aggiorna solo i KPI numerici e il grafico senza ricreare gli input (mantiene il focus durante la digitazione)
+     */
+    function updateCalculationsAndCharts() {
+      const metrics = calculateMetrics();
+
+      // 1. Aggiorna Hero Card
+      const surplusCard = document.getElementById('surplusCard');
+      const surplusValEl = document.getElementById('surplusValue');
+      const totalExpEl = document.getElementById('totalExpensesValue');
+      const expRatioEl = document.getElementById('expensesRatioText');
+      const savingsRateEl = document.getElementById('savingsRateValue');
+      const annualProjEl = document.getElementById('annualProjectionValue');
+      const warningBadge = document.getElementById('budgetWarningBadge');
+
+      surplusValEl.textContent = formatEuro(metrics.surplus);
+      totalExpEl.textContent = formatEuro(metrics.totalExpenses);
+      expRatioEl.textContent = `${formatPercent(metrics.expensesRatio)} dell'entrata`;
+      savingsRateEl.textContent = formatPercent(metrics.savingsRate);
+
+      const sign = metrics.annualSurplus >= 0 ? '+' : '';
+      annualProjEl.textContent = `Proiezione: ${sign}${formatEuro(metrics.annualSurplus)}/anno`;
+
+      if (metrics.surplus >= 0) {
+        surplusCard.className = 'sm:col-span-1 rounded-2xl p-4 sm:p-5 border transition-colors bg-emerald-50/80 border-emerald-200';
+        surplusValEl.className = 'text-2xl sm:text-3xl font-extrabold text-emerald-700 tracking-tight';
+        savingsRateEl.className = 'text-2xl sm:text-3xl font-bold text-teal-700 tracking-tight';
+        warningBadge.classList.add('hidden');
+      } else {
+        surplusCard.className = 'sm:col-span-1 rounded-2xl p-4 sm:p-5 border transition-colors bg-red-50/90 border-red-200';
+        surplusValEl.className = 'text-2xl sm:text-3xl font-extrabold text-red-600 tracking-tight';
+        savingsRateEl.className = 'text-2xl sm:text-3xl font-bold text-red-600 tracking-tight';
+        warningBadge.classList.remove('hidden');
+      }
+
+      // Aggiorna i totali nell'intestazione di ogni card categoria
+      metrics.categoryTotals.forEach(cat => {
+        const badgeEl = document.getElementById(`cat-total-${cat.id}`);
+        if (badgeEl) {
+          badgeEl.textContent = `${formatEuro(cat.amount)} (${formatPercent(cat.percentOfIncome)})`;
+        }
+      });
+
+      // 2. Aggiorna Grafico Donut SVG e Barre di Ripartizione
+      renderDonutAndBars(metrics);
+    }
+
+    /**
+     * Disegna il grafico a ciambella SVG e le barre orizzontali
+     */
+    function renderDonutAndBars(metrics) {
+      const segmentsGroup = document.getElementById('donutSegments');
+      const barsContainer = document.getElementById('breakdownBarsContainer');
+      const centerLabel = document.getElementById('donutCenterLabel');
+      const centerAmount = document.getElementById('donutCenterAmount');
+      const centerSub = document.getElementById('donutCenterSub');
+
+      // Prepara le fette: le 4 categorie + eventuale Avanzo Libero se positivo
+      const slices = metrics.categoryTotals.map(c => ({
+        id: c.id,
+        label: c.label,
+        color: c.color,
+        amount: c.amount,
+        percentOfIncome: c.percentOfIncome
+      }));
+
+      if (metrics.surplus > 0) {
+        slices.push({
+          id: 'surplus',
+          label: 'Avanzo Libero',
+          color: SURPLUS_COLOR,
+          amount: metrics.surplus,
+          percentOfIncome: metrics.savingsRate
+        });
+      }
+
+      const chartTotal = slices.reduce((acc, s) => acc + s.amount, 0);
+      const radius = 76;
+      const circumference = 2 * Math.PI * radius;
+      let cumulativePercent = 0;
+
+      // Testo al centro della ciambella
+      if (metrics.surplus >= 0) {
+        centerLabel.textContent = 'Avanzo Libero';
+        centerAmount.textContent = formatEuro(metrics.surplus);
+        centerAmount.className = 'text-xl sm:text-2xl font-extrabold text-teal-700 mt-0.5';
+        centerSub.textContent = `${formatPercent(metrics.savingsRate)} dell'entrata`;
+      } else {
+        centerLabel.textContent = 'Deficit Mensile';
+        centerAmount.textContent = formatEuro(metrics.surplus);
+        centerAmount.className = 'text-xl sm:text-2xl font-extrabold text-red-600 mt-0.5';
+        centerSub.textContent = 'Uscite oltre budget';
+      }
+
+      // Genera cerchi SVG
+      let svgHtml = '';
+      if (chartTotal > 0) {
+        slices.forEach(slice => {
+          if (slice.amount <= 0) return;
+          const fraction = slice.amount / chartTotal;
+          const strokeLength = fraction * circumference;
+          const dashArray = `${strokeLength} ${circumference}`;
+          const dashOffset = -cumulativePercent * circumference;
+          cumulativePercent += fraction;
+
+          svgHtml += `
+            <circle
+              cx="100" cy="100" r="${radius}"
+              fill="transparent"
+              stroke="${slice.color}"
+              stroke-width="20"
+              stroke-dasharray="${dashArray}"
+              stroke-dashoffset="${dashOffset}"
+              class="donut-segment"
+              data-label="${slice.label}"
+              data-amount="${formatEuro(slice.amount)}"
+              data-percent="${formatPercent(slice.percentOfIncome)}"
+            >
+              <title>${slice.label}: ${formatEuro(slice.amount)} (${formatPercent(slice.percentOfIncome)})</title>
+            </circle>
+          `;
+        });
+      }
+      segmentsGroup.innerHTML = svgHtml;
+
+      // Aggiunge interattività hover sui segmenti per mostrare il dettaglio al centro
+      segmentsGroup.querySelectorAll('.donut-segment').forEach(seg => {
+        seg.addEventListener('mouseenter', () => {
+          centerLabel.textContent = seg.getAttribute('data-label');
+          centerAmount.textContent = seg.getAttribute('data-amount');
+          centerAmount.className = 'text-xl sm:text-2xl font-extrabold text-slate-900 mt-0.5';
+          centerSub.textContent = `${seg.getAttribute('data-percent')} entrata`;
+        });
+        seg.addEventListener('mouseleave', () => {
+          if (metrics.surplus >= 0) {
+            centerLabel.textContent = 'Avanzo Libero';
+            centerAmount.textContent = formatEuro(metrics.surplus);
+            centerAmount.className = 'text-xl sm:text-2xl font-extrabold text-teal-700 mt-0.5';
+            centerSub.textContent = `${formatPercent(metrics.savingsRate)} dell'entrata`;
+          } else {
+            centerLabel.textContent = 'Deficit Mensile';
+            centerAmount.textContent = formatEuro(metrics.surplus);
+            centerAmount.className = 'text-xl sm:text-2xl font-extrabold text-red-600 mt-0.5';
+            centerSub.textContent = 'Uscite oltre budget';
+          }
+        });
+      });
+
+      // Genera Barre Orizzontali di Ripartizione
+      const displayRows = [
+        ...metrics.categoryTotals,
+        {
+          id: 'surplus',
+          label: 'Avanzo Libero',
+          color: metrics.surplus >= 0 ? SURPLUS_COLOR : '#dc2626',
+          amount: metrics.surplus,
+          percentOfIncome: metrics.savingsRate
+        }
+      ];
+
+      barsContainer.innerHTML = displayRows.map(row => {
+        const barWidth = Math.max(0, Math.min(100, row.percentOfIncome));
+        return `
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center gap-2 font-medium text-slate-800">
+                <span class="w-3 h-3 rounded-full shrink-0" style="background-color: ${row.color};"></span>
+                <span>${row.label}</span>
+              </div>
+              <div class="flex items-center gap-2.5 tabular-nums">
+                <span class="font-bold text-slate-900">${formatEuro(row.amount)}</span>
+                <span class="text-xs font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 w-14 text-right">
+                  ${formatPercent(row.percentOfIncome)}
+                </span>
+              </div>
+            </div>
+            <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+              <div class="h-full rounded-full transition-all duration-300" style="width: ${barWidth}%; background-color: ${row.color};"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /**
+     * Renderizza l'intera griglia delle 4 categorie e delle relative voci
+     */
+    function renderCategories() {
+      const container = document.getElementById('categoriesContainer');
+      const metrics = calculateMetrics();
+
+      container.innerHTML = state.categories.map((cat, catIdx) => {
+        const catMetric = metrics.categoryTotals[catIdx];
+
+        const itemsHtml = cat.items.map((item, itemIdx) => {
+          // Se l'utente inserisce un numero maggiore del max dello slider, adattiamo dinamicamente il max dello slider
+          const effectiveMax = Math.max(item.max || 600, Number(item.value) || 0);
+
+          return `
+            <div class="p-3.5 rounded-xl bg-slate-50/90 border border-slate-200/70 hover:border-slate-300 transition space-y-2.5 group">
+              <div class="flex items-center justify-between gap-2">
+                <!-- Nome voce modificabile cliccandoci sopra -->
+                <input
+                  type="text"
+                  value="${escapeHtml(item.label)}"
+                  aria-label="Nome voce"
+                  title="Clicca per rinominare questa voce"
+                  data-cat-idx="${catIdx}"
+                  data-item-idx="${itemIdx}"
+                  class="item-label-input flex-1 text-sm font-medium text-slate-800 bg-transparent border border-transparent hover:border-slate-300 focus:bg-white focus:border-blue-500 focus:outline-none rounded-lg px-1.5 py-0.5 transition truncate"
+                />
+
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <!-- Campo numerico diretto (€) sincronizzato con lo slider -->
+                  <div class="relative flex items-center">
+                    <input
+                      type="number"
+                      min="0"
+                      step="1"
+                      value="${item.value}"
+                      aria-label="Importo in euro per ${escapeHtml(item.label)}"
+                      data-cat-idx="${catIdx}"
+                      data-item-idx="${itemIdx}"
+                      class="item-number-input w-20 pr-5 pl-2 py-1 text-right text-sm font-bold text-slate-900 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 tabular-nums"
+                    />
+                    <span class="absolute right-2 text-xs font-semibold text-slate-400 pointer-events-none">€</span>
+                  </div>
+
+                  <!-- Pulsante elimina voce -->
+                  <button
+                    type="button"
+                    title="Elimina voce"
+                    data-cat-idx="${catIdx}"
+                    data-item-idx="${itemIdx}"
+                    class="btn-delete-item p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition cursor-pointer"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Slider fluido -->
+              <div class="flex items-center gap-3">
+                <input
+                  type="range"
+                  min="${item.min || 0}"
+                  max="${effectiveMax}"
+                  step="${item.step || 5}"
+                  value="${item.value}"
+                  style="--thumb-color: ${cat.color};"
+                  data-cat-idx="${catIdx}"
+                  data-item-idx="${itemIdx}"
+                  class="item-range-input"
+                />
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        return `
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+            <!-- Intestazione Categoria -->
+            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between gap-2" style="border-left: 5px solid ${cat.color};">
+              <div class="flex items-center gap-2.5">
+                <span class="w-3 h-3 rounded-full shrink-0" style="background-color: ${cat.color};"></span>
+                <h3 class="font-bold text-slate-900 text-base">${escapeHtml(cat.label)}</h3>
+              </div>
+              <span id="cat-total-${cat.id}" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 tabular-nums">
+                ${formatEuro(catMetric.amount)} (${formatPercent(catMetric.percentOfIncome)})
+              </span>
+            </div>
+
+            <!-- Lista Voci -->
+            <div class="p-4 sm:p-5 space-y-3 flex-1">
+              ${itemsHtml || '<p class="text-xs text-slate-400 italic text-center py-3">Nessuna voce in questa categoria.</p>'}
+            </div>
+
+            <!-- Footer Card: Pulsante Aggiungi Voce -->
+            <div class="px-5 py-3 bg-slate-50/70 border-t border-slate-100">
+              <button
+                type="button"
+                data-cat-idx="${catIdx}"
+                class="btn-add-item w-full py-2 px-3 rounded-xl border border-dashed border-slate-300 hover:border-slate-400 hover:bg-white text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 transition cursor-pointer"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span>Aggiungi voce in ${escapeHtml(cat.label)}</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      attachCategoryEventListeners();
+    }
+
+    /**
+     * Collega tutti gli eventi su slider, input numerici, rinomina, aggiunta ed eliminazione
+     */
+    function attachCategoryEventListeners() {
+      // 1. Slider -> aggiorna stato, input numerico fratello e grafici
+      document.querySelectorAll('.item-range-input').forEach(slider => {
+        slider.addEventListener('input', (e) => {
+          const catIdx = Number(e.target.dataset.catIdx);
+          const itemIdx = Number(e.target.dataset.itemIdx);
+          const val = Math.max(0, Number(e.target.value) || 0);
+
+          state.categories[catIdx].items[itemIdx].value = val;
+
+          // Sincronizza l'input numerico corrispondente
+          const numberInput = document.querySelector(`.item-number-input[data-cat-idx="${catIdx}"][data-item-idx="${itemIdx}"]`);
+          if (numberInput) numberInput.value = val;
+
+          saveState();
+          updateCalculationsAndCharts();
+        });
+      });
+
+      // 2. Input Numerico Diretto -> aggiorna stato, slider fratello (espandendo il max se necessario) e grafici
+      document.querySelectorAll('.item-number-input').forEach(numInput => {
+        numInput.addEventListener('input', (e) => {
+          const catIdx = Number(e.target.dataset.catIdx);
+          const itemIdx = Number(e.target.dataset.itemIdx);
+          const raw = e.target.value;
+          const val = raw === '' ? 0 : Math.max(0, Number(raw) || 0);
+
+          state.categories[catIdx].items[itemIdx].value = val;
+
+          const slider = document.querySelector(`.item-range-input[data-cat-idx="${catIdx}"][data-item-idx="${itemIdx}"]`);
+          if (slider) {
+            if (val > Number(slider.max)) {
+              slider.max = val;
+            }
+            slider.value = val;
+          }
+
+          saveState();
+          updateCalculationsAndCharts();
+        });
+      });
+
+      // 3. Rinomina Voce
+      document.querySelectorAll('.item-label-input').forEach(labelInput => {
+        labelInput.addEventListener('change', (e) => {
+          const catIdx = Number(e.target.dataset.catIdx);
+          const itemIdx = Number(e.target.dataset.itemIdx);
+          const newName = e.target.value.trim() || 'Nuova voce';
+          e.target.value = newName;
+          state.categories[catIdx].items[itemIdx].label = newName;
+          saveState();
+        });
+      });
+
+      // 4. Elimina Voce
+      document.querySelectorAll('.btn-delete-item').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const catIdx = Number(e.currentTarget.dataset.catIdx);
+          const itemIdx = Number(e.currentTarget.dataset.itemIdx);
+          const removedName = state.categories[catIdx].items[itemIdx].label;
+          state.categories[catIdx].items.splice(itemIdx, 1);
+          saveState();
+          renderCategories();
+          updateCalculationsAndCharts();
+          showToast(`Voce "${removedName}" rimossa`);
+        });
+      });
+
+      // 5. Aggiungi Nuova Voce
+      document.querySelectorAll('.btn-add-item').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const catIdx = Number(e.currentTarget.dataset.catIdx);
+          state.categories[catIdx].items.push({
+            id: 'custom_' + Date.now(),
+            label: 'Nuova voce',
+            value: 0,
+            min: 0,
+            max: 600,
+            step: 5
+          });
+          saveState();
+          renderCategories();
+          updateCalculationsAndCharts();
+
+          // Mette subito il focus sul nome della nuova voce creata per permettere di scriverlo al volo
+          const newIdx = state.categories[catIdx].items.length - 1;
+          const newInput = document.querySelector(`.item-label-input[data-cat-idx="${catIdx}"][data-item-idx="${newIdx}"]`);
+          if (newInput) {
+            newInput.focus();
+            newInput.select();
+          }
+        });
+      });
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    /**
+     * Inizializzazione controlli globali (Entrata, Esporta JSON, Importa JSON, Scarica HTML, Ripristina)
+     */
+    function initGlobalControls() {
+      const incomeInput = document.getElementById('incomeInput');
+      incomeInput.value = state.income;
+
+      incomeInput.addEventListener('input', (e) => {
+        const val = e.target.value === '' ? 0 : Math.max(0, Number(e.target.value) || 0);
+        state.income = val;
+        saveState();
+        updateCalculationsAndCharts();
+      });
+
+      // Esporta Backup JSON
+      document.getElementById('btnExportJson').addEventListener('click', () => {
+        const dataStr = JSON.stringify(state, null, 2);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const dateTag = new Date().toISOString().slice(0, 10);
+        a.href = url;
+        a.download = `backup_piano_risparmio_${dateTag}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('Backup JSON scaricato con successo');
+      });
+
+      // Importa Backup JSON
+      document.getElementById('inputImportJson').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const imported = JSON.parse(event.target.result);
+            if (imported && typeof imported.income === 'number' && Array.isArray(imported.categories)) {
+              state = imported;
+              document.getElementById('incomeInput').value = state.income;
+              saveState();
+              renderCategories();
+              updateCalculationsAndCharts();
+              showToast('Backup JSON importato correttamente!');
+            } else {
+              showToast('Formato file JSON non valido', true);
+            }
+          } catch (err) {
+            showToast('Errore durante la lettura del file JSON', true);
+          }
+          e.target.value = '';
+        };
+        reader.readAsText(file);
+      });
+
+      // Scarica App HTML Autonoma con lo stato corrente incorporato
+      document.getElementById('btnDownloadHtml').addEventListener('click', () => {
+        try {
+          // Clona il documento corrente e inietta lo stato JSON aggiornato nel tag script dedicato
+          const docClone = document.documentElement.cloneNode(true);
+          const embeddedTag = docClone.querySelector('#embedded-budget-data');
+          if (embeddedTag) {
+            embeddedTag.textContent = JSON.stringify(state);
+          }
+          // Aggiorna anche il value dell'input entrata nel DOM clonato
+          const clonedIncomeInput = docClone.querySelector('#incomeInput');
+          if (clonedIncomeInput) {
+            clonedIncomeInput.setAttribute('value', state.income);
+          }
+
+          const fullHtml = '<!DOCTYPE html>\n' + docClone.outerHTML;
+          const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'Piano_di_Risparmio_Personale.html';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          showToast('Web App HTML scaricata con i tuoi dati attuali!');
+        } catch (err) {
+          console.error(err);
+          showToast('Errore durante la generazione del file HTML', true);
+        }
+      });
+
+      // Gestione Modal Conferma Ripristino
+      const confirmModal = document.getElementById('confirmModal');
+      document.getElementById('btnReset').addEventListener('click', () => {
+        confirmModal.classList.remove('hidden');
+        confirmModal.classList.add('flex');
+      });
+
+      document.getElementById('btnCancelReset').addEventListener('click', () => {
+        confirmModal.classList.add('hidden');
+        confirmModal.classList.remove('flex');
+      });
+
+      document.getElementById('btnConfirmReset').addEventListener('click', () => {
+        state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+        document.getElementById('incomeInput').value = state.income;
+        saveState();
+        renderCategories();
+        updateCalculationsAndCharts();
+        confirmModal.classList.add('hidden');
+        confirmModal.classList.remove('flex');
+        showToast('Valori iniziali ripristinati');
+      });
+    }
+
+    // Avvio dell'applicazione
+    window.addEventListener('DOMContentLoaded', () => {
+      initGlobalControls();
+      renderCategories();
+      updateCalculationsAndCharts();
+    });
+  </script>
+
+</body></html>
