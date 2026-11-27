@@ -198,7 +198,17 @@ const simDefaults=()=>({income:state.income,bills:state.rules.reduce((n,r)=>n+r.
 const baseRender=render;
 render=function(){
   baseRender();
-  if(tab==='home'&&state.profile)byId('title').textContent='Ciao, '+state.profile;
+  if(tab==='home'){
+    if(state.profile)byId('title').textContent='Ciao, '+state.profile;
+    const pocketTotal=state.goals.reduce((total,goal)=>total+goal.start,0)+sum(state.moves,'save');
+    const opening=state.opening||0;
+    const savings=card('I tuoi risparmi',
+      row('Risparmi iniziali fuori dai Pocket',money(opening))+
+      row('Totale nei Pocket',money(pocketTotal))+
+      row('<b>Totale risparmi registrati</b>','<b>'+money(opening+pocketTotal)+'</b>')+
+      '<div class="actions">'+btn('setup','Modifica risparmi iniziali')+'</div>');
+    byId('screen').querySelector('.stats').insertAdjacentHTML('afterend','<div class="toolbar">'+savings+'</div>');
+  }
   if(tab==='data')byId('screen').insertAdjacentHTML('afterbegin','<div class="actions toolbar">'+btn('setup','Modifica profilo')+'</div>');
     if(tab==='plan')byId('screen').insertAdjacentHTML('beforeend','<div class="toolbar">'+card('Spese periodiche',
     '<p class="muted">Le scadenze entrano nelle simulazioni. Quando paghi, registra la spesa nei Movimenti. Inserisci qui le voci che vuoi simulare a parte dal budget mensile.</p>'+
@@ -302,6 +312,7 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   navigator.serviceWorker.register('./sw.js').catch(error => console.warn('Modalità offline non disponibile', error));
 }
 </script></body></html>
+
 
 
 
