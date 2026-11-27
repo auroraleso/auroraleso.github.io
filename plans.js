@@ -1606,6 +1606,65 @@ factories["reference-pac"]=function(root){const source="<!DOCTYPE html>\n<html l
       renderEtfList();
     })();
 };
+function compactPlan(root,tab){
+ const budget=tab==='reference-budget';
+ const sections=[...root.querySelectorAll('main > section')];
+ const list=root.getElementById(budget?'categoriesContainer':'etfListContainer');
+ const total=root.getElementById(budget?'surplusValue':'kpiAllocatedValue');
+ const hero=document.createElement('div');hero.className='compact-hero';
+ const caption=document.createElement('small');caption.textContent=budget?'Ti resta al mese':'Investi al mese';
+ const value=document.createElement('strong');hero.append(caption,value);
+ sections[0].before(hero);
+ const update=()=>{value.textContent=total.textContent.trim();};
+ new MutationObserver(update).observe(total,{childList:true,characterData:true,subtree:true});update();
+ function summary(title,element){
+   const details=document.createElement('details');details.className='compact-fold';
+   const label=document.createElement('summary');label.textContent=title;details.append(label);
+   element.before(details);details.append(element);return details;
+ }
+ summary(budget?'Stipendio e riepilogo':'Rata e riepilogo',sections[0]);
+ if(budget){
+   summary('Vedi il grafico delle spese',sections[1]);
+   sections[2].before(sections[1].parentElement);
+   const projection=document.createElement('button');projection.type='button';projection.className='compact-projection';projection.textContent='Proiezioni';
+   projection.onclick=()=>document.dispatchEvent(new Event('filo-projections'));
+   hero.append(projection);
+ }else{
+   const donut=root.getElementById('donutLegend');
+   const chart=donut?.parentElement?.parentElement;
+   if(chart&&!chart.contains(list))summary('Grafico delle quote',chart);
+   const simulation=summary('Simula la crescita',sections[2]);
+   simulation.addEventListener('toggle',()=>{if(simulation.open)window.dispatchEvent(new Event('resize'));});
+ }
+ function foldRows(){
+   for(const element of [...list.children]){
+     if(element.tagName==='DETAILS')continue;
+     const details=summary('',element);
+     details.classList.add('compact-row');
+     const label=details.firstElementChild;
+     const name=element.querySelector(budget?'h3':'.etf-name-input');
+     const amount=element.querySelector(budget?'[id^="cat-total-"]':'.etf-amount-input');
+     const caption=document.createElement('span'),cost=document.createElement('b');
+     label.append(caption,cost);
+     const sync=()=>{
+       caption.textContent=(budget?name?.textContent:name?.value)?.trim()||'Voce';
+       cost.textContent=budget?(amount?.textContent||'').trim():Number(amount?.value||0).toLocaleString('it-IT',{style:'currency',currency:'EUR'});
+     };
+     sync();
+     element.addEventListener('input',()=>queueMicrotask(sync));
+     if(budget&&amount)new MutationObserver(sync).observe(amount,{childList:true,characterData:true,subtree:true});
+   }
+ }
+ const openRows=()=>[...list.querySelectorAll('details[open] summary span')].map(x=>x.textContent);
+ let expanded=[];
+ list.addEventListener('toggle',()=>{expanded=openRows();},true);
+ new MutationObserver(()=>{foldRows();for(const d of list.querySelectorAll('details'))if(expanded.includes(d.querySelector('summary span')?.textContent))d.open=true;}).observe(list,{childList:true});
+ foldRows();
+ const style=document.createElement('style');
+ style.textContent='.compact-hero{position:sticky;top:0;z-index:4;background:linear-gradient(120deg,#234c3c,#45765a);color:#fff;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px;border-radius:15px;padding:12px 16px;margin:0 0 12px}.compact-hero strong{font-size:clamp(22px,5vw,34px);line-height:1.15}.compact-hero small{color:#eaf2e9}.compact-projection{margin-inline-start:auto;border:1px solid #ffffff6b;border-radius:8px;background:#ffffff19;color:white;min-height:40px;padding:5px 10px}.compact-fold{margin:8px 0;background:#fafbf8;border:1px solid #d5e1d6;border-radius:12px}.compact-fold>summary{display:flex;align-items:center;gap:8px;min-height:48px;padding:8px 12px;color:#244a38;font-weight:700;cursor:pointer;list-style:none}.compact-fold>summary:after{content:"+";margin-inline-start:auto;font-size:20px}.compact-fold[open]>summary:after{content:"−"}.compact-fold>summary b{margin-inline-start:auto;font-size:13px;text-align:right}.compact-fold>summary b+*{margin:0}.compact-row>summary:after{margin-inline-start:0}.compact-row>div{border:0!important;box-shadow:none!important}.compact-fold>section{margin:0}.plan-body main{padding-top:4px!important}.plan-body section:has(#categoriesContainer),.plan-body section:has(#etfListContainer){margin-top:12px}.compact-fold>summary::-webkit-details-marker{display:none}';
+ root.append(style);
+}
+
 return (tab,screen)=>{let view=views.get(tab);if(!view){view=document.createElement('section');screen.replaceChildren(view);const root=view.attachShadow({mode:'open'});factories[tab](root);
  const legacy=root.querySelector('.plan-body header');
  if(legacy){
@@ -1627,4 +1686,4 @@ return (tab,screen)=>{let view=views.get(tab);if(!view){view=document.createElem
    style.textContent='.plan-tools{margin:8px auto 24px;padding:0 16px;max-width:64rem;color:#52695b;font:500 14px system-ui}.plan-tools summary{cursor:pointer;width:fit-content;padding:8px 0}.plan-tools-actions{display:flex;flex-wrap:wrap;gap:8px;padding:8px 0}.plan-tools-actions>*{display:inline-flex;align-items:center;gap:6px;padding:8px 10px;min-height:40px;border:1px solid #d0ded2;border-radius:9px;background:#fafbf8!important;color:#284b3a!important;cursor:pointer}';
    root.append(style);
  }
- views.set(tab,view);}else if(screen.firstElementChild!==view)screen.replaceChildren(view);if(tab==='reference-pac')window.dispatchEvent(new Event('resize'));};})();
+ compactPlan(root,tab); views.set(tab,view);}else if(screen.firstElementChild!==view)screen.replaceChildren(view);if(tab==='reference-pac')window.dispatchEvent(new Event('resize'));};})();
