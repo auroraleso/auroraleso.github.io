@@ -208,7 +208,13 @@ render=function(){
       row('Totale nei Pocket',money(pocketTotal))+
       row('<b>Totale risparmi registrati</b>','<b>'+money(opening+pocketTotal)+'</b>')+
       '<div class="actions">'+btn('setup','Modifica risparmi iniziali')+'</div>');
-    byId('screen').querySelector('.stats').insertAdjacentHTML('afterend','<div class="toolbar">'+savings+'</div>');
+    const expected=state.rules.filter(r=>r.amount>0).map(r=>({kind:'out',category:r.name,amount:r.amount}));
+    const planned=sum(expected,'out'), free=state.income-planned;
+    const slices=free>0?[...expected,{kind:'out',category:'Margine previsto',amount:free}]:expected;
+    const graph=card('Ripartizione del budget previsto',row('Stipendio previsto',money(state.income))+row('Spese mensili a budget',money(planned))+row('Margine previsto',money(free))+
+      (slices.length?chart(slices,sum(slices,'out')):'<p class="muted">Imposta lo stipendio e le categorie in Budget per vedere la ripartizione.</p>')+
+      '<small>Le spese periodiche con scadenza sono incluse in Simulazioni.</small>');
+    byId('screen').querySelector('.stats').insertAdjacentHTML('afterend','<div class="grid">'+graph+savings+'</div>');
   }
   if(tab==='data')byId('screen').insertAdjacentHTML('afterbegin','<div class="actions toolbar">'+btn('setup','Modifica profilo')+'</div>');
     if(tab==='plan')byId('screen').insertAdjacentHTML('beforeend','<div class="toolbar">'+card('Spese periodiche',
@@ -313,6 +319,7 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   navigator.serviceWorker.register('./sw.js').catch(error => console.warn('Modalità offline non disponibile', error));
 }
 </script></body></html>
+
 
 
 
