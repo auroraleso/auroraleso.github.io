@@ -1,4 +1,4 @@
-const cacheName = 'filo-mobile-v18';
+const cacheName = 'filo-mobile-v19';
 const files = ['./index.html','./plans.js?v=17','./budget.html','./pac.html','./manifest.webmanifest','./icon-180.png?v=2','./icon-192.png?v=2','./icon-512.png?v=2'];
 self.addEventListener('install', event => event.waitUntil(caches.open(cacheName).then(cache => cache.addAll(files))));
 self.addEventListener('activate', event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith('filo-mobile-') && key !== cacheName).map(key => caches.delete(key))))));
@@ -13,6 +13,7 @@ self.addEventListener('fetch', event => {
     event.respondWith(caches.open(cacheName).then(cache => cache.match(event.request)).then(hit => hit || fetch(event.request)));
   }
 });
+
 
 
 
