@@ -103,10 +103,11 @@ const put=(items,item,field='id')=>items.some(x=>x[field]===item[field])?items.m
 const activeDate=()=>date().startsWith(period())?date():period()+'-01';
 function move(id,kind='out') {
   const old=state.moves.find(x=>x.id===id);
+  const salary=!old&&kind==='in';
   const item=old || {id:uid(),kind,amount:0,date:activeDate(),category:kind==='in'?'Stipendio':'',note:kind==='in'?'Stipendio':'',extra:false};
   const options=[['out','Spesa'],['in','Entrata'],...(item.kind==='save'?[['save','Accantonamento']]:[])];
-  modal(old?'Modifica movimento':'Nuovo movimento',
-    '<label>Tipo<select name="kind">'+options.map(([v,l])=>'<option value="'+v+'" '+(item.kind===v?'selected':'')+'>'+l+'</option>').join('')+'</select></label>'+
+  modal(old?'Modifica movimento':salary?'Registra stipendio':'Nuovo movimento',
+    (salary?'<input type="hidden" name="kind" value="in">':'<label>Tipo<select name="kind">'+options.map(([v,l])=>'<option value="'+v+'" '+(item.kind===v?'selected':'')+'>'+l+'</option>').join('')+'</select></label>')+
     field('date','Data','date',item.date,'required')+number('amount','Importo in euro',item.amount?item.amount/100:'','0.01')+
     field('note','Descrizione','text',item.note,'required maxlength="100"')+
     '<div id="expenseFields">'+field('category','Categoria','text',item.kind==='out'?item.category:'','maxlength="100" list="categories"')+
@@ -312,6 +313,7 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   navigator.serviceWorker.register('./sw.js').catch(error => console.warn('Modalità offline non disponibile', error));
 }
 </script></body></html>
+
 
 
 
