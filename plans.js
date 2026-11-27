@@ -147,18 +147,24 @@ factories["reference-budget"]=function(root){const source="<!DOCTYPE html>\n<htm
     /**
      * Calcola i totali per categoria, uscite totali, avanzo e percentuali
      */
+    function categoryColor(category,index){
+      const colors=['#8056a2','#008da5','#be6448','#527347','#ad477c','#6373b8','#896239','#44908b','#9b4d44','#6a8340','#596c84','#bd792e'];
+      if(index<4)return category.color;
+      return colors[index-4]||'hsl('+Math.round(((index-16)*137.508+29)%360)+' 60% '+(index%2?37:52)+'%)';
+    }
+
     function calculateMetrics() {
       const income = Math.max(0, Number(state.income) || 0);
       let totalExpenses = 0;
 
-      const categoryTotals = state.categories.map(cat => {
+      const categoryTotals = state.categories.map((cat,index) => {
         const itemsTotal=cat.items.reduce((acc,item)=>acc+Math.max(0,Number(item.value)||0),0);
         const sum=Number.isFinite(cat.target)?Math.max(0,Math.round((cat.target-(cat.carry||0))*100)/100):itemsTotal;
         totalExpenses += sum;
         return {
           id: cat.id,
           label: cat.label,
-          color: cat.color,
+          color: categoryColor(cat,index),
           amount: sum,
           percentOfIncome: income > 0 ? (sum / income) * 100 : 0
         };
@@ -429,7 +435,7 @@ factories["reference-budget"]=function(root){const source="<!DOCTYPE html>\n<htm
                   max="${effectiveMax}"
                   step="${item.step || 5}"
                   value="${item.value}"
-                  style="--thumb-color: ${cat.color};"
+                  style="--thumb-color: ${categoryColor(cat,catIdx)};"
                   data-cat-idx="${catIdx}"
                   data-item-idx="${itemIdx}"
                   class="item-range-input"
@@ -442,9 +448,9 @@ factories["reference-budget"]=function(root){const source="<!DOCTYPE html>\n<htm
         return `
           <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
             <!-- Intestazione Categoria -->
-            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between gap-2" style="border-left: 5px solid ${cat.color};">
+            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between gap-2" style="border-left: 5px solid ${categoryColor(cat,catIdx)};">
               <div class="flex items-center gap-2.5">
-                <span class="w-3 h-3 rounded-full shrink-0" style="background-color: ${cat.color};"></span>
+                <span class="w-3 h-3 rounded-full shrink-0" style="background-color: ${categoryColor(cat,catIdx)};"></span>
                 <label class="category-name"><span>Nome categoria</span><input type="text" maxlength="60" value="${escapeHtml(cat.label)}" data-category-name="${catIdx}"></label>
               </div>
               <span id="cat-total-${cat.id}" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 tabular-nums">
@@ -1717,7 +1723,7 @@ function compactPlan(root,tab){
  new MutationObserver(()=>{foldRows();for(const d of list.querySelectorAll('details'))if(expanded.includes(d.querySelector('summary span')?.textContent))d.open=true;}).observe(list,{childList:true});
  foldRows();
  const style=document.createElement('style');
- style.textContent='.category-envelope,.add-category{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:12px;color:#52695b;font-size:13px}.category-envelope label,.add-category label{display:grid;gap:5px;min-width:0}.category-envelope input,.add-category input{width:100%;min-width:0;background:#f3f7f2;color:#20352a;border:1px solid #d0ded2;border-radius:8px;padding:8px;font-size:16px}.category-envelope small{grid-column:1/-1}.add-category button{align-self:end;padding:7px 9px;border-radius:8px;background:#2e624b;color:white;min-height:42px}.category-name{display:grid;gap:3px;font-size:12px;color:#52695b;min-width:0}.category-name input{width:100%;min-width:0;background:#f3f7f2;border:1px solid #d0ded2;border-radius:8px;padding:6px 8px;font-size:16px;color:#20352a}.compact-hero{position:sticky;top:0;z-index:4;background:linear-gradient(120deg,#234c3c,#45765a);color:#fff;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px;border-radius:15px;padding:12px 16px;margin:0 0 12px}.compact-hero strong{font-size:clamp(22px,5vw,34px);line-height:1.15}.compact-hero small{color:#eaf2e9}.compact-projection{margin-inline-start:auto;border:1px solid #ffffff6b;border-radius:8px;background:#ffffff19;color:white;min-height:40px;padding:5px 10px}.compact-fold{margin:8px 0;background:#fafbf8;border:1px solid #d5e1d6;border-radius:12px}.compact-fold>summary{display:flex;align-items:center;gap:8px;min-height:48px;padding:8px 12px;color:#244a38;font-weight:700;cursor:pointer;list-style:none}.compact-fold>summary:after{content:"+";margin-inline-start:auto;font-size:20px}.compact-fold[open]>summary:after{content:"−"}.compact-fold>summary b{margin-inline-start:auto;font-size:13px;text-align:right}.compact-fold>summary b+*{margin:0}.compact-row>summary:after{margin-inline-start:0}.compact-row>div{border:0!important;box-shadow:none!important}.compact-fold>section{margin:0}.plan-body main{padding-top:4px!important}.plan-body section:has(#categoriesContainer),.plan-body section:has(#etfListContainer){margin-top:12px}.compact-fold>summary::-webkit-details-marker{display:none}';
+ style.textContent='.category-envelope,.add-category{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:12px;color:#52695b;font-size:13px}.category-envelope label,.add-category label{display:grid;gap:5px;min-width:0}.category-envelope input,.add-category input{width:100%;min-width:0;background:#f3f7f2;color:#20352a;border:1px solid #d0ded2;border-radius:8px;padding:8px;font-size:16px}.category-envelope small{grid-column:1/-1}.add-category button{align-self:end;padding:7px 9px;border-radius:8px;background:#2e624b;color:white;min-height:42px}.category-name{display:grid;gap:3px;font-size:12px;color:#52695b;min-width:0}.category-name input{width:100%;min-width:0;background:#f3f7f2;border:1px solid #d0ded2;border-radius:8px;padding:6px 8px;font-size:16px;color:#20352a}.compact-hero{position:sticky;top:0;z-index:4;background:linear-gradient(120deg,#234c3c,#45765a);color:#fff;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px;border-radius:15px;padding:12px 16px;margin:0 0 12px}.compact-hero strong{font-size:clamp(22px,5vw,34px);line-height:1.15}.compact-hero small{color:#eaf2e9}.compact-projection{margin-inline-start:auto;border:1px solid #ffffff6b;border-radius:8px;background:#ffffff19;color:white;min-height:40px;padding:5px 10px}.compact-fold{margin:8px 0;background:#fafbf8;border:1px solid #d5e1d6;border-radius:12px}.compact-fold>summary{display:flex;align-items:center;gap:8px;min-height:48px;padding:8px 12px;color:#244a38;font-weight:700;cursor:pointer;list-style:none}.compact-fold>summary:after{content:"+";margin-inline-start:auto;font-size:20px}.compact-fold[open]>summary:after{content:"−"}.compact-fold>summary b{margin-inline-start:auto;font-size:13px;text-align:right}.compact-fold>summary b+*{margin:0}.compact-row>summary:after{margin-inline-start:0;font-size:14px;min-width:14px;text-align:center;color:#52695b}#categoriesContainer .btn-add-item svg,#categoriesContainer .btn-delete-item svg{width:13px;height:13px}#categoriesContainer .btn-delete-item{min-width:36px;min-height:36px;display:grid;place-items:center}.compact-row>div{border:0!important;box-shadow:none!important}.compact-fold>section{margin:0}.plan-body main{padding-top:4px!important}.plan-body section:has(#categoriesContainer),.plan-body section:has(#etfListContainer){margin-top:12px}.compact-fold>summary::-webkit-details-marker{display:none}';
  root.append(style);
 }
 
