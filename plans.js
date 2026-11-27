@@ -1606,4 +1606,25 @@ factories["reference-pac"]=function(root){const source="<!DOCTYPE html>\n<html l
       renderEtfList();
     })();
 };
-return (tab,screen)=>{let view=views.get(tab);if(!view){view=document.createElement('section');screen.replaceChildren(view);const root=view.attachShadow({mode:'open'});factories[tab](root);views.set(tab,view);}else if(screen.firstElementChild!==view)screen.replaceChildren(view);if(tab==='reference-pac')window.dispatchEvent(new Event('resize'));};})();
+return (tab,screen)=>{let view=views.get(tab);if(!view){view=document.createElement('section');screen.replaceChildren(view);const root=view.attachShadow({mode:'open'});factories[tab](root);
+ const legacy=root.querySelector('.plan-body header');
+ if(legacy){
+   const details=document.createElement('details');
+   details.className='plan-tools';
+   const label=document.createElement('summary');
+   label.textContent='Gestisci piano';
+   details.append(label);
+   const controls=document.createElement('div');
+   controls.className='plan-tools-actions';
+   for(const id of ['btnDownloadHtml','btnExportJson','inputImportJson','btnReset']){
+     const item=root.getElementById(id);
+     if(item)controls.append(id==='inputImportJson'?item.closest('label')||item:item);
+   }
+   details.append(controls);
+   legacy.hidden=true;
+   root.querySelector('.plan-body').append(details);
+   const style=document.createElement('style');
+   style.textContent='.plan-tools{margin:8px auto 24px;padding:0 16px;max-width:64rem;color:#52695b;font:500 14px system-ui}.plan-tools summary{cursor:pointer;width:fit-content;padding:8px 0}.plan-tools-actions{display:flex;flex-wrap:wrap;gap:8px;padding:8px 0}.plan-tools-actions>*{display:inline-flex;align-items:center;gap:6px;padding:8px 10px;min-height:40px;border:1px solid #d0ded2;border-radius:9px;background:#fafbf8!important;color:#284b3a!important;cursor:pointer}';
+   root.append(style);
+ }
+ views.set(tab,view);}else if(screen.firstElementChild!==view)screen.replaceChildren(view);if(tab==='reference-pac')window.dispatchEvent(new Event('resize'));};})();
