@@ -187,7 +187,7 @@ byId('upload').onchange=async e=>{
       save({...state,rules:plan.rules,income:plan.income},'Piano importato.');tab='plan';render();
     } else {
       const next=validate(JSON.parse(raw));
-      if((state.moves.length||state.rules.length||state.goals.length||state.income) && !confirm('Il backup sostituirà tutti i dati attuali. Continuare?'))return;
+      if((state.moves.length||state.rules.length||state.goals.length||state.income||state.pendingIncome?.length||state.cashPlan) && !confirm('Il backup sostituirà tutti i dati attuali. Continuare?'))return;
       save(next,'Backup importato.');
     }
   } catch(error) { byId('status').textContent='Importazione fallita. '+error.message; }
@@ -200,6 +200,12 @@ validate=function(data){
     if(data?.opening!==undefined && (!Number.isSafeInteger(data.opening)||data.opening<0||data.opening>1e11))throw Error('Risparmi iniziali non validi.');
   if(data?.recurring!==undefined && (!Array.isArray(data.recurring)||!data.recurring.every(r=>r&&typeof r.name==='string'&&r.name.trim()&&r.name.length<=100&&Number.isSafeInteger(r.amount)&&r.amount>0&&r.amount<=1e11&&Number.isInteger(r.every)&&r.every>=1&&r.every<=36&&/^\d{4}-(0[1-9]|1[0-2])$/.test(r.first))))throw Error('Spese periodiche non valide.');
   const checked=baseValidate(data);
+  const isCash=n=>Number.isSafeInteger(n)&&n>=0&&n<=1e11;
+  const isDate=s=>typeof s==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(s)&&Number.isFinite(Date.parse(s))&&new Date(s).toISOString().slice(0,10)===s;
+  const pending=checked.pendingIncome;
+  if(pending!==undefined&&(!Array.isArray(pending)||!pending.every(x=>x&&typeof x.id==='string'&&/^[\w-]+$/.test(x.id)&&typeof x.note==='string'&&x.note.trim()&&x.note.length<=100&&isCash(x.amount)&&x.amount>0&&(x.expected===''||isDate(x.expected)))||new Set(pending.map(x=>x.id)).size!==pending.length))throw Error('Entrate attese non valide.');
+  const plan=checked.cashPlan;
+  if(plan!==undefined&&(!plan||!isDate(plan.payday)||!isCash(plan.balance)||!isCash(plan.committed)))throw Error('Stima dello spendibile non valida.');
   if(checked.goals.some(g=>g.reserved!==undefined&&(!Number.isSafeInteger(g.reserved)||g.reserved<0)) ||
     checked.goals.reduce((n,g)=>n+(g.reserved||0),0)>(checked.opening||0))throw Error('Il totale destinato ai Pocket supera i risparmi iniziali.');
   return checked;
@@ -255,11 +261,63 @@ function assignSavings(){
 }
 
 const simDefaults=()=>({income:state.income,bills:state.rules.reduce((n,r)=>n+r.amount,0),extra:0,oneoff:0,start:accessibleSavings(),months:12});
+function cashOverview(){
+  const plan=state.cashPlan;
+  const current=plan&&plan.payday>=date();
+  const pending=(state.pendingIncome||[]).slice().sort((a,b)=>(a.expected||'9999').localeCompare(b.expected||'9999'));
+  const total=pending.reduce((n,x)=>n+x.amount,0);
+  const spendable=card('Fino al prossimo stipendio',
+    (current?row('Spendibile stimato','<b class="'+(plan.balance<plan.committed?'bad':'')+'">'+money(plan.balance-plan.committed)+'</b>')+
+      row('Stipendio previsto il',escape(plan.payday.split('-').reverse().join('/')))+
+      row('Saldo libero indicato',money(plan.balance))+row('Da pagare prima dello stipendio',money(plan.committed)):
+      '<p class="muted">'+(plan?'Aggiorna il saldo e la data del prossimo stipendio.':'Indica quanto hai a disposizione e quanto devi ancora pagare.')+'</p>')+
+    '<p class="muted">Stima basata sul saldo che inserisci. Escludi i Pocket, poi sottrai solo le spese ancora da pagare.</p>'+
+    '<div class="actions">'+btn('cash-plan',plan?'Aggiorna la stima':'Calcola lo spendibile','primary')+'</div>');
+  const waiting=card('Entrate in attesa',
+    row('Totale atteso','<b>'+money(total)+'</b>')+
+    (pending.map(x=>row('<b>'+escape(x.note)+'</b><small>'+money(x.amount)+(x.expected?' · '+escape(x.expected.split('-').reverse().join('/')):' · Data da definire')+'</small>',
+      btn('collect:'+escape(x.id),'Incassato','primary')+' '+btn('pending:'+escape(x.id),'Modifica'))).join('')||'<p class="muted">Aggiungi un rimborso, una ripetizione o un conguaglio in arrivo.</p>')+
+    '<div class="actions">'+btn('pending','＋ Entrata attesa')+'</div>');
+  return '<div class="grid">'+spendable+waiting+'</div>';
+}
+function cashPlan(){
+  const plan=state.cashPlan;
+  modal('Fino al prossimo stipendio',
+    '<p class="muted">Inserisci il saldo di oggi che puoi usare, esclusi i soldi già destinati ai Pocket. Somma le rate, le bollette e le altre spese ancora da pagare prima dell’accredito.</p>'+
+    field('payday','Data del prossimo stipendio','date',plan?.payday>=date()?plan.payday:'','required min="'+date()+'"')+
+    number('balance','Saldo libero di oggi',plan?plan.balance/100:'')+
+    number('committed','Spese ancora da pagare',plan?plan.committed/100:''),
+    f=>save(validate({...state,cashPlan:{payday:f.get('payday'),balance:cents(f,'balance'),committed:cents(f,'committed')}}),'Stima aggiornata.'));
+}
+function pendingIncome(id,collect=false){
+  const entries=state.pendingIncome||[], old=entries.find(x=>x.id===id);
+  if(collect&&!old)return;
+  const item=old||{id:uid(),note:'',amount:0,expected:''};
+  modal(collect?'Conferma incasso':old?'Modifica entrata attesa':'Nuova entrata attesa',
+    field('note','Descrizione','text',item.note,'required maxlength="100"')+
+    number('amount',collect?'Importo ricevuto':'Importo atteso',item.amount?item.amount/100:'','0.01')+
+    (collect?field('date','Data di incasso','date',date(),'required max="'+date()+'"'):
+      field('date','Data prevista (facoltativa)','date',item.expected)),
+    f=>{
+      const note=f.get('note').trim(),amount=cents(f,'amount'),day=f.get('date');
+      if(collect){
+        if(!(state.pendingIncome||[]).some(x=>x.id===id))throw Error('Questa entrata è già stata registrata.');
+        const movement={id:uid(),kind:'in',date:day,amount,note,category:'Entrate',extra:false};
+        const next=validate({...state,pendingIncome:entries.filter(x=>x.id!==id),moves:[...state.moves,movement]});
+        byId('period').value=day.slice(0,7);
+        save(next,'Incasso registrato nei Movimenti. Aggiorna il saldo libero se vuoi includerlo nella stima.');
+      }else{
+        save(validate({...state,pendingIncome:put(entries,{id:item.id,note,amount,expected:day})}),'Entrata attesa salvata.');
+      }
+    },old&&!collect?()=>save({...state,pendingIncome:entries.filter(x=>x.id!==id)},'Entrata attesa eliminata.'):null);
+}
+
 const baseRender=render;
 render=function(){
   baseRender();
   if(tab==='home'){
     if(state.profile)byId('title').textContent='Ciao, '+state.profile;
+    byId('screen').querySelector('.hero').insertAdjacentHTML('afterend',cashOverview());
     const pocketTotal=state.goals.reduce((total,goal)=>total+goal.start+(goal.reserved||0),0)+sum(state.moves,'save');
     const opening=accessibleSavings();
     const savings=card('I tuoi risparmi',
@@ -357,7 +415,10 @@ function setup(){
 }
 document.addEventListener('click',event=>{
   const action=event.target.closest('[data-action]')?.dataset.action;
-    if(action==='setup')setup(); if(action==='tutorial')tutorial(); if(action==='assign')assignSavings();
+    if(action==='cash-plan')cashPlan();
+  if(action==='pending'||action?.startsWith('pending:'))pendingIncome(action.split(':')[1]);
+  if(action?.startsWith('collect:'))pendingIncome(action.split(':')[1],true);
+  if(action==='setup')setup(); if(action==='tutorial')tutorial(); if(action==='assign')assignSavings();
   if(action==='pac'||action==='recurring'||action?.startsWith('recurring:')){
     const entries=state.recurring||[], index=action.includes(':')?Number(action.split(':')[1]):-1, old=entries[index];
     const pac=old?.pac===true||action==='pac';
@@ -382,6 +443,7 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   navigator.serviceWorker.register('./sw.js').catch(error => console.warn('Modalità offline non disponibile', error));
 }
 </script></body></html>
+
 
 
 
