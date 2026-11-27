@@ -1,5 +1,5 @@
-<!doctype html><html lang="it"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#264439"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" href="./icon-180.png"><title>Filo · Bilancio personale</title><style>*{box-sizing:border-box}body{margin:0;background:#f6f3ed;color:#222e28;font:15px system-ui}main{max-width:1110px;margin:auto;padding:28px 22px 60px}header,nav,.line,.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}header{padding-bottom:22px;border-bottom:1px solid #dedbd1}.brand{font:700 28px Georgia;letter-spacing:-1px}nav{justify-content:flex-start;margin:20px 0}button,input,select{font:inherit}button{cursor:pointer;border:1px solid #dedbd1;background:#fffdf8;color:inherit;border-radius:9px;padding:10px 14px}button:hover{border-color:#58745e}button.primary,button[aria-current=true]{background:#264439;color:white;border-color:#264439}input,select{border:1px solid #cccac0;border-radius:8px;padding:9px;background:#fffdf8;color:inherit;max-width:100%}h1,h2,h3,p{margin:0}h1,h2{font-family:Georgia;font-weight:normal}h1{font-size:clamp(35px,7vw,63px);letter-spacing:-.055em}h2{font-size:25px;margin-bottom:14px}small,.muted{color:#536258}.hero{background:radial-gradient(ellipse at 100% 0%,#48694d,#213c33 72%);color:#fff9e8;border-radius:22px;padding:clamp(20px,5vw,44px);margin:14px 0}.hero small{color:#dddcca}.hero strong{display:block;font:44px Georgia;margin:5px 0 15px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.card{background:#fffdf8;border:1px solid #e6e1d6;border-radius:16px;padding:20px;min-width:0}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stats strong{display:block;margin-top:5px;font:clamp(21px,4vw,30px) Georgia;overflow-wrap:anywhere}.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid #eeebe2;overflow-wrap:anywhere}.row:last-child{border-bottom:0}.row small{display:block;margin-top:4px}.track{height:8px;background:#ebe8df;border-radius:8px;overflow:hidden;margin-top:6px}.fill{height:100%;background:#557858}.bad{color:#a23c35}.fill.bad{background:#ba5b4d}.donut{width:143px;height:143px;border-radius:50%;display:grid;place-items:center;margin:12px auto}.donut span{width:106px;height:106px;border-radius:50%;background:#fffdf8;display:grid;place-items:center;font:20px Georgia}.bars{display:flex;justify-content:space-around;align-items:end;gap:4px;height:155px}.monthbar{text-align:center;font-size:12px;flex:1}.pair{height:125px;display:flex;gap:3px;justify-content:center;align-items:end}.pair i{width:23%;max-width:20px;background:#557858;border-radius:4px 4px 0 0}.pair i+i{background:#ce9c81}.form{display:grid;gap:11px}.form label{display:grid;gap:4px}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}dialog{width:min(460px,calc(100% - 26px));border:1px solid #dedbd1;border-radius:16px;background:#fffdf8;color:inherit;padding:22px}dialog::backdrop{background:#182a23a0}#status{min-height:24px;margin-top:16px}.toolbar{margin:14px 0}.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px}a{color:inherit}p{line-height:1.5}@media(max-width:640px){main{padding:16px 12px 42px}.grid{grid-template-columns:1fr}.card{padding:14px}.stats{gap:5px}.stats .card{padding:9px}.stats small{font-size:11px}.stats strong{font-size:18px}nav{gap:5px}nav button{padding:8px}.row button{padding:7px}.hero strong{font-size:37px}}:root{color-scheme:light}body{font-size:16px;background:#f5f2ec}header{position:sticky;top:0;z-index:2;background:#f5f2ec;padding:12px 0}button,input,select{min-height:44px}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #9c7847;outline-offset:3px}.brand small{font:500 14px system-ui;letter-spacing:0}.hero{box-shadow:0 16px 32px #26443921}.hero .actions button{background:#fff7e1;border-color:#fff7e1;color:#233e33}.hero .actions button:hover{background:#e7dcc3}.card{box-shadow:0 4px 17px #332d1b08}.stats .card{border-top:3px solid #a9af92}.stats .card:nth-child(2){border-top-color:#c68e74}.stats .card:nth-child(3){border-top-color:#839a8b}summary{cursor:pointer;margin-top:8px}.row button{min-height:44px}@media(max-width:640px){main{padding-bottom:calc(36px + env(safe-area-inset-bottom))}header{top:env(safe-area-inset-top)}nav{display:grid;grid-template-columns:repeat(3,1fr)}nav button{padding:7px 5px;font-size:14px}.brand small{display:block}.stats small{font-size:12px}}
-.row>div:last-child button{margin:2px 0}@media(max-width:420px){.row:has([data-action^="deposit:"])>div:last-child{display:grid;gap:3px}}</style><body><main><header><div class="brand">Filo <small> / Bilancio personale</small></div><button id="add" class="primary">＋ Movimento</button></header><nav aria-label="Sezioni"><button data-tab="home">Panoramica</button><button data-tab="moves">Movimenti</button><button data-tab="plan">Budget</button><button data-tab="goals">Pocket</button><button data-tab="data">Backup</button></nav><div class="top"><h1 id="title"></h1><label>Mese <input type="month" id="period"></label></div><section id="screen"></section><p id="status" role="status"></p></main><dialog id="dialog"><form id="form" class="form"></form></dialog><input type="file" accept=".json,.html,.htm" id="upload" hidden><script>
+<!doctype html><html lang="it"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#2059b2"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" href="./icon-180.png?v=2"><link rel="icon" href="./icon-192.png?v=2"><title>Filo · Bilancio personale</title><style>*{box-sizing:border-box}body{margin:0;background:#f6f3ed;color:#222e28;font:15px system-ui}main{max-width:1110px;margin:auto;padding:28px 22px 60px}header,nav,.line,.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}header{padding-bottom:22px;border-bottom:1px solid #dedbd1}.brand{font:700 28px Georgia;letter-spacing:-1px}nav{justify-content:flex-start;margin:20px 0}button,input,select{font:inherit}button{cursor:pointer;border:1px solid #dedbd1;background:#fffdf8;color:inherit;border-radius:9px;padding:10px 14px}button:hover{border-color:#58745e}button.primary,button[aria-current=true]{background:#264439;color:white;border-color:#264439}input,select{border:1px solid #cccac0;border-radius:8px;padding:9px;background:#fffdf8;color:inherit;max-width:100%}h1,h2,h3,p{margin:0}h1,h2{font-family:Georgia;font-weight:normal}h1{font-size:clamp(35px,7vw,63px);letter-spacing:-.055em}h2{font-size:25px;margin-bottom:14px}small,.muted{color:#536258}.hero{background:radial-gradient(ellipse at 100% 0%,#48694d,#213c33 72%);color:#fff9e8;border-radius:22px;padding:clamp(20px,5vw,44px);margin:14px 0}.hero small{color:#dddcca}.hero strong{display:block;font:44px Georgia;margin:5px 0 15px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.card{background:#fffdf8;border:1px solid #e6e1d6;border-radius:16px;padding:20px;min-width:0}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stats strong{display:block;margin-top:5px;font:clamp(21px,4vw,30px) Georgia;overflow-wrap:anywhere}.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid #eeebe2;overflow-wrap:anywhere}.row:last-child{border-bottom:0}.row small{display:block;margin-top:4px}.track{height:8px;background:#ebe8df;border-radius:8px;overflow:hidden;margin-top:6px}.fill{height:100%;background:#557858}.bad{color:#a23c35}.fill.bad{background:#ba5b4d}.donut{width:143px;height:143px;border-radius:50%;display:grid;place-items:center;margin:12px auto}.donut span{width:106px;height:106px;border-radius:50%;background:#fffdf8;display:grid;place-items:center;font:20px Georgia}.bars{display:flex;justify-content:space-around;align-items:end;gap:4px;height:155px}.monthbar{text-align:center;font-size:12px;flex:1}.pair{height:125px;display:flex;gap:3px;justify-content:center;align-items:end}.pair i{width:23%;max-width:20px;background:#557858;border-radius:4px 4px 0 0}.pair i+i{background:#ce9c81}.form{display:grid;gap:11px}.form label{display:grid;gap:4px}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}dialog{width:min(460px,calc(100% - 26px));border:1px solid #dedbd1;border-radius:16px;background:#fffdf8;color:inherit;padding:22px}dialog::backdrop{background:#182a23a0}#status{min-height:24px;margin-top:16px}.toolbar{margin:14px 0}.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px}a{color:inherit}p{line-height:1.5}@media(max-width:640px){main{padding:16px 12px 42px}.grid{grid-template-columns:1fr}.card{padding:14px}.stats{gap:5px}.stats .card{padding:9px}.stats small{font-size:11px}.stats strong{font-size:18px}nav{gap:5px}nav button{padding:8px}.row button{padding:7px}.hero strong{font-size:37px}}:root{color-scheme:light}body{font-size:16px;background:#f5f2ec}header{position:sticky;top:0;z-index:2;background:#f5f2ec;padding:12px 0}button,input,select{min-height:44px}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #9c7847;outline-offset:3px}.brand small{font:500 14px system-ui;letter-spacing:0}.hero{box-shadow:0 16px 32px #26443921}.hero .actions button{background:#fff7e1;border-color:#fff7e1;color:#233e33}.hero .actions button:hover{background:#e7dcc3}.card{box-shadow:0 4px 17px #332d1b08}.stats .card{border-top:3px solid #a9af92}.stats .card:nth-child(2){border-top-color:#c68e74}.stats .card:nth-child(3){border-top-color:#839a8b}summary{cursor:pointer;margin-top:8px}.row button{min-height:44px}@media(max-width:640px){main{padding-bottom:calc(36px + env(safe-area-inset-bottom))}header{top:env(safe-area-inset-top)}nav{display:grid;grid-template-columns:repeat(3,1fr)}nav button{padding:7px 5px;font-size:14px}.brand small{display:block}.stats small{font-size:12px}}
+.row>div:last-child button{margin:2px 0}@media(max-width:420px){.row:has([data-action^="deposit:"])>div:last-child{display:grid;gap:3px}}dialog{max-height:90dvh;overflow:auto}fieldset{min-width:0;border:1px solid #dedbd1;border-radius:9px;padding:10px}.setup-pocket{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:7px}.setup-pocket input{width:100%}#projection svg{margin-top:8px}#projection strong{font-weight:600}body,header{background:#f1f5fb;color:#162544}header{border-color:#dce6f4}.brand{font:800 27px system-ui;letter-spacing:-.06em}.brand small{color:#526785}.card,dialog{background:white;border-color:#dce6f4;color:#162544}.card{box-shadow:0 4px 20px #25519c0b}h1,h2,.stats strong,.hero strong,.donut span{font-family:system-ui}h1{font-weight:800;letter-spacing:-.065em}h2{font-weight:750;font-size:21px;letter-spacing:-.035em}.hero{background:linear-gradient(124deg,#143884,#2b65c5);color:white;box-shadow:0 14px 32px #18418b31}.hero strong{font-weight:800;letter-spacing:-.06em}.hero small{color:#ebf2ff}.hero .actions button{background:#fff;border-color:#fff;color:#173e82}.hero .actions button:hover{background:#e8f1ff}button,input,select{border-color:#ccdbee;background:white}button:hover{border-color:#2870c8}button.primary,button[aria-current=true]{background:#2059b2;border-color:#2059b2;color:white}.stats .card{border-top-color:#6394e7}.stats .card:nth-child(2){border-top-color:#dfa471}.stats .card:nth-child(3){border-top-color:#67a996}.muted,small{color:#526785}.track{background:#e9eff9}.fill{background:#306ec4}.row{border-color:#eaf0f9}.donut span{background:white;font-weight:700}.pair i{background:#3570c5}.pair i+i{background:#dfa471}#projection polyline{stroke:#2763bf}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline-color:#2568cc}@media(max-width:640px){header{padding:10px 0}.brand{font-size:24px}.hero strong{font-size:36px}}</style><body><main><header><div class="brand">Filo <small> / Bilancio personale</small></div><button id="add" class="primary">＋ Movimento</button></header><nav aria-label="Sezioni"><button data-tab="home">Panoramica</button><button data-tab="moves">Movimenti</button><button data-tab="plan">Budget</button><button data-tab="goals">Pocket</button><button data-tab="sim">Simulazioni</button><button data-tab="data">Backup</button></nav><div class="top"><h1 id="title"></h1><label>Mese <input type="month" id="period"></label></div><section id="screen"></section><p id="status" role="status"></p></main><dialog id="dialog"><form id="form" class="form"></form></dialog><input type="file" accept=".json,.html,.htm" id="upload" hidden><script>
 const byId = id => document.getElementById(id);
 const key = 'filo-bilancio-v1';
 const money = cents => new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR'}).format(cents / 100);
@@ -15,7 +15,7 @@ const period = () => byId('period').value || date().slice(0,7);
 const monthList = () => state.moves.filter(item => item.date.startsWith(period())).sort((a,b)=>b.date.localeCompare(a.date));
 const sum = (list, kind) => list.filter(item=>item.kind===kind).reduce((total,item)=>total+item.amount,0);
 const expense = (list, category, extra = false) => sum(list.filter(item=>!extra ? item.category===category : item.extra),'out');
-const palette = ['#557858','#c38769','#9a8759','#647f8a','#93788b','#455a44'];
+const palette = ['#3570c5','#df9b65','#5b9f8a','#826ac3','#508ba7','#bf627d'];
 function save(next,message) {
   state = next;
   try { localStorage.setItem(key,JSON.stringify(state)); byId('status').textContent=message; }
@@ -70,7 +70,7 @@ function history() {
     return {name:d.toLocaleDateString('it-IT',{month:'short'}),...metrics(state.moves.filter(x=>x.date.startsWith(p)))};
   });
   const max=Math.max(1,...months.flatMap(x=>[x.income,x.out]));
-  return '<div class="bars">'+months.map(m=>'<div class="monthbar" title="'+escape(m.name+' · entrate '+money(m.income)+' · spese '+money(m.out))+'"><div class="pair"><i style="height:'+m.income/max*100+'%"></i><i style="height:'+m.out/max*100+'%"></i></div>'+escape(m.name)+'</div>').join('')+'</div><small>Verde · entrate &nbsp; Rosa · spese</small>'+ '<details><summary>Valori mensili</summary>'+months.map(m=>row(escape(m.name),money(m.income)+' / '+money(m.out))).join('')+'</details>';
+  return '<div class="bars">'+months.map(m=>'<div class="monthbar" title="'+escape(m.name+' · entrate '+money(m.income)+' · spese '+money(m.out))+'"><div class="pair"><i style="height:'+m.income/max*100+'%"></i><i style="height:'+m.out/max*100+'%"></i></div>'+escape(m.name)+'</div>').join('')+'</div><small>Blu · entrate &nbsp; Ambra · spese</small>'+ '<details><summary>Valori mensili</summary>'+months.map(m=>row(escape(m.name),money(m.income)+' / '+money(m.out))).join('')+'</details>';
 }
 function moveRows(list) {
   return list.map(x=>row('<b>'+escape(x.note)+'</b><small>'+escape(x.date.split('-').reverse().join('/')+' · '+(x.kind==='save'?(state.goals.find(g=>g.id===x.category)?.name||'Risparmi'):x.category)+(x.extra?' · Extra':''))+'</small>',(x.kind==='in'?'+':'−')+money(x.amount)+' '+btn('move:'+escape(x.id),'Modifica'))).join('') || '<p class="muted">Nessun movimento per questa selezione.</p>';
@@ -184,11 +184,126 @@ byId('upload').onchange=async e=>{
     }
   } catch(error) { byId('status').textContent='Importazione fallita. '+error.message; }
 };
+
+const baseValidate=validate;
+validate=function(data){
+  if(data?.profile!==undefined && (typeof data.profile!=='string'||data.profile.length>60))throw Error('Nome del profilo non valido.');
+  if(data?.welcomed!==undefined && typeof data.welcomed!=='boolean')throw Error('Configurazione non valida.');
+    if(data?.opening!==undefined && (!Number.isSafeInteger(data.opening)||data.opening<0||data.opening>1e11))throw Error('Risparmi iniziali non validi.');
+  if(data?.recurring!==undefined && (!Array.isArray(data.recurring)||!data.recurring.every(r=>r&&typeof r.name==='string'&&r.name.trim()&&r.name.length<=100&&Number.isSafeInteger(r.amount)&&r.amount>0&&r.amount<=1e11&&Number.isInteger(r.every)&&r.every>=1&&r.every<=36&&/^\d{4}-(0[1-9]|1[0-2])$/.test(r.first))))throw Error('Spese periodiche non valide.');
+  return baseValidate(data);
+};
+let scenario=null;
+const simDefaults=()=>({income:state.income,bills:state.rules.reduce((n,r)=>n+r.amount,0),extra:0,oneoff:0,start:(state.opening||0),months:12});
+const baseRender=render;
+render=function(){
+  baseRender();
+  if(tab==='home'&&state.profile)byId('title').textContent='Ciao, '+state.profile;
+  if(tab==='data')byId('screen').insertAdjacentHTML('afterbegin','<div class="actions toolbar">'+btn('setup','Modifica profilo')+'</div>');
+    if(tab==='plan')byId('screen').insertAdjacentHTML('beforeend','<div class="toolbar">'+card('Spese periodiche',
+    '<p class="muted">Le scadenze entrano nelle simulazioni. Quando paghi, registra la spesa nei Movimenti. Inserisci qui le voci che vuoi simulare a parte dal budget mensile.</p>'+
+    (state.recurring||[]).map((r,i)=>row('<b>'+escape(r.name)+'</b><small>'+money(r.amount)+' · Ogni '+r.every+' mesi · Da '+escape(r.first)+'</small>',btn('recurring:'+i,'Modifica'))).join('')+
+    '<div class="actions">'+btn('recurring','＋ Spesa periodica')+'</div>')+'</div>');
+  if(tab!=='sim')return;
+  byId('title').textContent='Simulazioni';
+  scenario??=simDefaults();
+  byId('screen').innerHTML='<div class="grid"><article class="card"><h2>Imposta lo scenario</h2><form id="scenario" class="form">'+
+    number('income','Entrata mensile',scenario.income/100)+number('bills','Spese mensili',scenario.bills/100)+
+    number('extra','Extra ogni mese',scenario.extra/100)+number('oneoff','Extra una tantum, nel primo mese',scenario.oneoff/100)+
+    number('start','Somma già disponibile',scenario.start/100)+number('months','Orizzonte in mesi',scenario.months,'1','1','36')+
+    '</form><div class="actions">'+btn('reset-sim','Riparti dal budget')+'</div><p class="muted toolbar">Le prove restano in questa sessione e non modificano il bilancio.</p></article>'+
+    '<article class="card" id="projection" aria-live="polite"></article></div>';
+  const form=byId('scenario');
+  form.onsubmit=e=>e.preventDefault();
+  form.oninput=()=>{
+    if(!form.checkValidity())return;
+    const f=new FormData(form);
+    scenario={...Object.fromEntries(['income','bills','extra','oneoff','start'].map(k=>[k,cents(f,k)])),months:Number(f.get('months'))};
+    drawProjection();
+  };
+  drawProjection();
+};
+function drawProjection(){
+  const s=scenario, margin=s.income-s.bills-s.extra;
+    const monthNumber=p=>{const [y,m]=p.split('-').map(Number);return y*12+m-1;};
+  const origin=monthNumber(period());
+  let recurringTotal=0;
+  const series=[s.start];
+  for(let i=0;i<s.months;i++){
+    const scheduled=(state.recurring||[]).reduce((sum,r)=>{
+      const elapsed=origin+i-monthNumber(r.first);
+      return sum+(elapsed>=0&&elapsed%r.every===0?r.amount:0);
+    },0);
+    recurringTotal+=scheduled;
+    series.push(series.at(-1)+margin-scheduled-(i===0?s.oneoff:0));
+  }
+  const lo=Math.min(0,...series),hi=Math.max(0,...series),spread=hi-lo||1;
+  const y=value=>122-(value-lo)/spread*104;
+  const points=series.map((value,i)=>(12+296*i/s.months)+','+y(value)).join(' ');
+  const summary=row('Margine mensile prima delle scadenze',money(margin))+row('Spese periodiche nel periodo',money(recurringTotal))+row('Saldo dopo '+s.months+' mesi',money(series.at(-1)));
+  const baseline=' <line x1="12" x2="308" y1="'+y(0)+'" y2="'+y(0)+'" stroke="#a8a093" stroke-dasharray="4 4"/>';
+  byId('projection').innerHTML='<h2>Saldo previsto</h2><svg viewBox="0 0 320 138" width="100%" role="img" aria-label="Andamento del saldo previsto">'+baseline+
+    '<polyline fill="none" stroke="#426452" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" points="'+points+'"/></svg>'+
+    '<div class="line muted"><span>Oggi</span><span>Mese '+s.months+'</span></div>'+summary+
+    '<details><summary>Valori mensili</summary>'+series.map((n,i)=>row(i?'Mese '+i:'Oggi',money(n))).join('')+'</details>';
+}
+function setup(){
+  const first=!state.welcomed;
+  modal(first?'Benvenuta o benvenuto in Filo':'Il tuo profilo',
+    '<p class="muted">Imposta il tuo budget di partenza. Lo stipendio previsto serve per fare simulazioni, mentre lo stipendio ricevuto va registrato nei Movimenti.</p>'+
+    field('profile','Come ti chiami?','text',state.profile||'','maxlength="60" autocomplete="given-name"')+
+    number('income','Stipendio mensile previsto',state.income/100)+number('opening','Risparmi iniziali fuori dai Pocket',(state.opening||0)/100)+
+    '<fieldset><legend>Pocket da creare (facoltativi)</legend>'+[1,2,3].map(i=>
+      '<div class="setup-pocket">'+field('pocket'+i,'Nome Pocket '+i,'text','','maxlength="100"')+
+      field('initial'+i,'Già nel Pocket','number','','min="0" max="1000000000" step="0.01"')+field('target'+i,'Obiettivo in euro','number','','min="0.01" max="1000000000" step="0.01"')+'</div>').join('')+'</fieldset>',
+    f=>{
+      const added=[];
+      for(let i=1;i<=3;i++){
+        const name=f.get('pocket'+i).trim(),target=cents(f,'target'+i),start=cents(f,'initial'+i);
+        if(!name&&!target&&!start)continue;
+        if(!name||!target)throw Error('Inserisci nome e obiettivo per ciascun Pocket.');
+        added.push({id:uid(),name,target,start,weight:1});
+      }
+      scenario=null;
+      save(validate({...state,profile:f.get('profile').trim(),welcomed:true,opening:cents(f,'opening'),income:cents(f,'income'),goals:[...state.goals,...added]}),'Profilo salvato.');
+    });
+  const dialog=byId('dialog');
+  if(first){
+    byId('cancel').textContent='Più tardi';
+    const skip=()=>save({...state,welcomed:true},'Puoi completare il profilo da Backup.');
+    byId('cancel').onclick=()=>{skip();dialog.close();};
+    dialog.addEventListener('cancel',skip,{once:true});
+    dialog.addEventListener('close',()=>dialog.removeEventListener('cancel',skip),{once:true});
+  }
+}
+document.addEventListener('click',event=>{
+  const action=event.target.closest('[data-action]')?.dataset.action;
+    if(action==='setup')setup();
+  if(action==='recurring'||action?.startsWith('recurring:')){
+    const entries=state.recurring||[], index=action.includes(':')?Number(action.split(':')[1]):-1, old=entries[index];
+    modal(old?'Modifica scadenza':'Nuova spesa periodica',
+      field('name','Nome','text',old?.name||'','required maxlength="100"')+
+      number('amount','Importo in euro',old?old.amount/100:'','0.01')+
+      number('every','Ogni quanti mesi?',old?.every||1,'1','1','36')+
+      field('first','Prima scadenza','month',old?.first||period(),'required'),
+      f=>{
+        const entry={name:f.get('name').trim(),amount:cents(f,'amount'),every:Number(f.get('every')),first:f.get('first')};
+        const recurring=old?entries.map((r,i)=>i===index?entry:r):[...entries,entry];
+        save(validate({...state,recurring}),'Scadenza salvata.');
+      },old?()=>save({...state,recurring:entries.filter((r,i)=>i!==index)},'Scadenza eliminata.'):null);
+  }
+  if(action==='reset-sim'){scenario=simDefaults();render();}
+});
 render();
+if(!state.welcomed)setup();
+
 </script><script>
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
   navigator.serviceWorker.register('./sw.js').catch(error => console.warn('Modalità offline non disponibile', error));
 }
 </script></body></html>
+
+
+
 
 
