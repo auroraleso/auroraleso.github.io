@@ -1663,8 +1663,9 @@ function compactPlan(root,tab){
  }
  summary(budget?'Stipendio e riepilogo':'Rata e riepilogo',sections[0]);
  if(budget){
-   summary('Vedi il grafico delle spese',sections[1]);
-   sections[2].before(sections[1].parentElement);
+   const chart=summary('Ripartizione visiva del budget',sections[1]);
+   chart.open=true;
+   hero.after(chart);
    const projection=document.createElement('button');projection.type='button';projection.className='compact-projection';projection.textContent='Proiezioni';
    projection.onclick=()=>document.dispatchEvent(new Event('filo-projections'));
    hero.append(projection);
